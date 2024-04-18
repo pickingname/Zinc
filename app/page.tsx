@@ -89,22 +89,34 @@ import axios from 'axios';
 export default function Home() {
   const [online, setOnline] = useState<boolean>(false);
   const [ping, setPing] = useState<number>(0);
+  const [pingPercentage, setPingPercentage] = useState<number>(0);
+
+  let websitetogetstatus = "https://google.com";
 
   useEffect(() => {
     const checkStatus = async () => {
       try {
         const startTime = Date.now();
-        await axios.get('http://ps.ac.th'); // Replace 'https://example.com' with your website URL
+        await axios.get(websitetogetstatus);
         const endTime = Date.now();
         setOnline(true);
-        setPing(endTime - startTime);
+        const currentPing = endTime - startTime;
+        setPing(currentPing);
+        const percentage = Math.min((currentPing / 5000) * 100, 100);
+        setPingPercentage(percentage);
       } catch (error) {
         setOnline(false);
         setPing(0);
+        setPingPercentage(0);
       }
     };
 
-    checkStatus();
+    const interval = setInterval(() => {
+      checkStatus();
+    }, 1000); // Refresh every 1 seconds
+
+    // Clear interval on component unmount
+    return () => clearInterval(interval);
   }, []);
   
 
@@ -317,10 +329,9 @@ export default function Home() {
                   className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
                 >
                   <CardHeader className="pb-3">
-                    <CardTitle>Your Orders</CardTitle>
+                    <CardTitle>fetcher</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
-                      Introducing Our Dynamic Orders Dashboard for Seamless
-                      Management and Insightful Analysis.
+                      currently getting data from {websitetogetstatus}
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
@@ -329,16 +340,16 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-1">
                   <CardHeader className="pb-2">
-                    <CardDescription>This Week</CardDescription>
-                    <CardTitle className="text-4xl"> {online ? 'online' : 'offline'} {ping}ms</CardTitle>
+                    <CardDescription>latest request</CardDescription>
+                    <CardTitle className="text-4xl"> {online ? 'online' : 'offline'}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      +25% from last week
+                      {ping}ms
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={25} aria-label="25% increase" />
+                    <Progress value={pingPercentage} aria-label="25% increase" />
                   </CardFooter>
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2">
