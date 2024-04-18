@@ -1,4 +1,10 @@
+"use client";
+
 import Image from "next/image"
+
+import { useState } from 'react';
+import { useEffect } from 'react';
+
 import Link from "next/link"
 import {
   ChevronLeft,
@@ -76,8 +82,32 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "@/components/ui/tooltip"
+import { overrideGlobalXHR } from 'tauri-xhr'
+overrideGlobalXHR()
+import axios from 'axios';
 
 export default function Home() {
+  const [online, setOnline] = useState<boolean>(false);
+  const [ping, setPing] = useState<number>(0);
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const startTime = Date.now();
+        await axios.get('http://ps.ac.th'); // Replace 'https://example.com' with your website URL
+        const endTime = Date.now();
+        setOnline(true);
+        setPing(endTime - startTime);
+      } catch (error) {
+        setOnline(false);
+        setPing(0);
+      }
+    };
+
+    checkStatus();
+  }, []);
+  
+
   return (
     <main>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -300,7 +330,7 @@ export default function Home() {
                 <Card x-chunk="dashboard-05-chunk-1">
                   <CardHeader className="pb-2">
                     <CardDescription>This Week</CardDescription>
-                    <CardTitle className="text-4xl">$1,329</CardTitle>
+                    <CardTitle className="text-4xl"> {online ? 'online' : 'offline'} {ping}ms</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
