@@ -109,6 +109,8 @@ export default function Home() {
         const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
         setPingPercentage(percentage);
         setFetching(false);
+
+        console.info(ping)
       } catch (error) {
         setOnline(false);
         setPing(0);
@@ -119,7 +121,7 @@ export default function Home() {
 
     const interval = setInterval(() => {
       checkStatus();
-    }, 3000); // Refresh every 3 seconds
+    }, 1000); // Refresh every 1 seconds
 
     // Clear interval on component unmount
     return () => clearInterval(interval);
