@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image"
+import { Loader2 } from "lucide-react"
 
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -90,11 +91,14 @@ export default function Home() {
   const [online, setOnline] = useState<boolean>(false);
   const [ping, setPing] = useState<number>(0);
   const [pingPercentage, setPingPercentage] = useState<number>(0);
+  const [fetching, setFetching] = useState<boolean>(true);
 
-  let websitetogetstatus = "https://google.com";
+  let websitetogetstatus = "https://ps.ac.th";
+  var pinglimit = "5000";
 
   useEffect(() => {
     const checkStatus = async () => {
+
       try {
         const startTime = Date.now();
         await axios.get(websitetogetstatus);
@@ -102,23 +106,25 @@ export default function Home() {
         setOnline(true);
         const currentPing = endTime - startTime;
         setPing(currentPing);
-        const percentage = Math.min((currentPing / 5000) * 100, 100);
+        const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
         setPingPercentage(percentage);
+        setFetching(false);
       } catch (error) {
         setOnline(false);
         setPing(0);
         setPingPercentage(0);
+        setFetching(false);
       }
     };
 
     const interval = setInterval(() => {
       checkStatus();
-    }, 1000); // Refresh every 1 seconds
+    }, 3000); // Refresh every 3 seconds
 
     // Clear interval on component unmount
     return () => clearInterval(interval);
   }, []);
-  
+
 
   return (
     <main>
@@ -304,7 +310,7 @@ export default function Home() {
                   className="overflow-hidden rounded-full"
                 >
                   <Image
-                    src="/placeholder-user.jpg"
+                    src="https://www.redditstatic.com/shreddit/assets/favicon/64x64.png"
                     width={36}
                     height={36}
                     alt="Avatar"
@@ -335,22 +341,37 @@ export default function Home() {
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
-                    <Button>Create New Order</Button>
+                    {/* Render different buttons based on the fetching state */}
+                    {fetching ? (
+                      <Button disabled>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        please wait while we make the first request
+                      </Button>
+                    ) : (
+                      <Button>
+                        website is {online ? 'online' : 'offline'}
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-1">
-                  <CardHeader className="pb-2">
-                    <CardDescription>latest request</CardDescription>
-                    <CardTitle className="text-4xl"> {online ? 'online' : 'offline'}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-xs text-muted-foreground">
-                      {ping}ms
+                  {!fetching && (
+
+                    <div>
+                      <CardHeader className="pb-2">
+                        <CardDescription> {online ? 'online' : 'offline'}</CardDescription>
+                        <CardTitle className="text-4xl">{ping}ms </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-xs text-muted-foreground">
+                          thats {pingPercentage}% of the limit ({pinglimit}ms)
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Progress value={pingPercentage} aria-label="25% increase" />
+                      </CardFooter>
                     </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Progress value={pingPercentage} aria-label="25% increase" />
-                  </CardFooter>
+                  )}
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2">
                   <CardHeader className="pb-2">
