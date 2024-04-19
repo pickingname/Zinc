@@ -7,6 +7,18 @@ import { Loader2, Tornado } from "lucide-react"
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Gauge } from 'lucide-react';
 import Link from "next/link"
 import {
   ChevronLeft,
@@ -436,7 +448,7 @@ export default function Home() {
                           <TableRow>
                             <TableHead>request</TableHead>
                             <TableHead className="hidden sm:table-cell">ping</TableHead>
-                            <TableHead className="hidden sm:table-cell">incre / decre</TableHead>                 
+                            <TableHead className="hidden sm:table-cell">incre / decre</TableHead>
                             <TableHead className="hidden md:table-cell">time</TableHead>
                             <TableHead className="text-right">status</TableHead>
                           </TableRow>
@@ -456,7 +468,7 @@ export default function Home() {
                               </TableCell>
                               <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
                               <TableCell className="text-right">
-                              <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
+                                <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
                                   {entry.status}
                                 </Badge>
                               </TableCell>
@@ -495,20 +507,25 @@ export default function Home() {
                         Track Order
                       </span>
                     </Button> */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
                         <Button size="icon" variant="outline" className="h-8 w-8">
-                          <MoreVertical className="h-3.5 w-3.5" />
+                          <Gauge className="h-3.5 w-3.5" />
                           <span className="sr-only">More</span>
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Export</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>debug panel</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            debug content
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>close</AlertDialogCancel>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
