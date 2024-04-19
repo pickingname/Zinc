@@ -3,7 +3,7 @@
 {/* imports */ }
 import Image from "next/image"
 import { Loader2, Tornado } from "lucide-react"
-
+import { Skeleton } from "@/components/ui/skeleton"
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -121,6 +121,13 @@ export default function Home() {
   let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
   const [webtype, setWebtype] = useState<string>('unknown');
   let [totalRequests, setTotalRequests] = useState<number>(0);
+  const [ip, setIP] = useState("");
+
+  const getData = async () => {
+    const res = await axios.get("https://api.ipify.org/?format=json");
+    console.log(res.data);
+    setIP(res.data.ip);
+  };
 
 
   let websitename = "localhost test website";
@@ -135,6 +142,7 @@ export default function Home() {
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
+    getData();
     overrideGlobalXHR() /* override the xhr to disable cors */
     let webtype = 'not yet acquired';
 
@@ -227,7 +235,7 @@ export default function Home() {
       <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
         <div className="flex flex-col sm:gap-4 sm:py-4"> {/* main div */}
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
-            <Sheet>
+            {/* <Sheet>
               <SheetTrigger asChild>
                 <Button size="icon" variant="outline" className="sm:hidden">
                   <PanelLeft className="h-5 w-5" />
@@ -280,8 +288,8 @@ export default function Home() {
                   </Link>
                 </nav>
               </SheetContent>
-            </Sheet>
-            <Breadcrumb className="hidden md:flex">
+            </Sheet> */}
+            <Breadcrumb className="flex">
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
@@ -588,13 +596,13 @@ export default function Home() {
                     <div className="grid gap-3">
                       <div className="font-semibold">uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        uptime
+                        total uptime
                       </address>
-                    </div>uptime
+                    </div>
                     <div className="grid auto-rows-max gap-3">
                       <div className="font-semibold">downtime</div>
                       <div className="text-muted-foreground">
-                        downtime
+                        total downtime
                       </div>
                     </div>
                   </div>
@@ -612,22 +620,38 @@ export default function Home() {
                           <a href="mailto:">{totalRequests}</a>
                         </dd>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">Phone</dt>
+                      <div className="flex items-center justify-between font-outfit">
+                        <dt className="text-muted-foreground">device ip</dt>
                         <dd>
-                          <a href="tel:">+1 234 567 890</a>
+                          <AlertDialog>
+                            <AlertDialogTrigger>
+                              <span className="underline underline-offset-2">
+                                click to view
+                              </span>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle><span className="font-outfit">current device ip</span></AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  <span className="font-mono text-4xl">{ip}</span>
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>close</AlertDialogCancel>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </dd>
                       </div>
                     </dl>
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">About</div>
+                    <div className="font-semibold">about</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="flex items-center gap-1 text-muted-foreground">
-                          <p>server type</p>
-                          <p>Creation date : 00/00/00</p>
+                          <p><a href="https://github.com/pickingname/get" className="text-blue-400 underline underline-offset-2">get.app</a> v1.0.0-pre-1 revision n°4</p>
                         </dt>
                       </div>
                     </dl>
