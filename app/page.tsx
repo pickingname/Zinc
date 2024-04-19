@@ -166,6 +166,8 @@ export default function Home() {
         setFetching(false);
       } catch (error) {
         setOnline(false);
+        setstatuscode(408);
+        setstatustext('server cannot be reached');
         if (initialFirstOffline) {
           toast.error("website is offline");
           initialFirstOffline = false;
