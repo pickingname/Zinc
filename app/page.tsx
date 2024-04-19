@@ -213,7 +213,7 @@ export default function Home() {
         transition={Bounce}
       />
       <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14"> {/* main div */}
+        <div className="flex flex-col sm:gap-4 sm:py-4"> {/* main div */}
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
             <Sheet>
               <SheetTrigger asChild>
@@ -303,19 +303,19 @@ export default function Home() {
                   size="icon"
                   className="overflow-hidden rounded-full"
                 >
-                  <div className={online ? " w-full h-full bg-green-500 animate-pulse" : " w-full h-full bg-red-500 animate-pulse"}>
+                  <div className={online ? " w-full h-full bg-green-500 animate-pulse motion-safe:animate-none" : " w-full h-full bg-red-500 animate-pulse motion-safe:animate-none"}>
 
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              {/* <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
+              </DropdownMenuContent> */}
             </DropdownMenu>
           </header>
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"> {/* main dashboard that contains the blocks and grids */}
@@ -436,9 +436,9 @@ export default function Home() {
                           <TableRow>
                             <TableHead>request</TableHead>
                             <TableHead className="hidden sm:table-cell">ping</TableHead>
-                            <TableHead className="hidden sm:table-cell">status</TableHead>
+                            <TableHead className="hidden sm:table-cell">incre / decre</TableHead>                 
                             <TableHead className="hidden md:table-cell">time</TableHead>
-                            <TableHead className="text-right">incre / decre</TableHead>
+                            <TableHead className="text-right">status</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -452,18 +452,13 @@ export default function Home() {
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">{entry.ping}ms</TableCell>
                               <TableCell className="hidden sm:table-cell">
-                                <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
-                                  {entry.status}
-                                </Badge>
+
                               </TableCell>
                               <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
                               <TableCell className="text-right">
-                                {index > 0 && pingChanges[index - 1] !== undefined ? (
-                                  <>
-                                    {pingChanges[index - 1] > 0 ? "+" : ""}
-                                    {pingChanges[index - 1].toFixed(to_round)}%
-                                  </>
-                                ) : null}
+                              <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
+                                  {entry.status}
+                                </Badge>
                               </TableCell>
                             </TableRow>
                           ))}
