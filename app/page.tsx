@@ -98,6 +98,8 @@ export default function Home() {
   let [online, setOnline] = useState<boolean>(false);
   let [ping, setPing] = useState<number>(0);
   let [pingPercentage, setPingPercentage] = useState<number>(0);
+  let [statuscode, setstatuscode] = useState<number>(0);
+  const [statustext, setstatustext] = useState<string>('unknown');
   let [fetching, setFetching] = useState<boolean>(true);
   let [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]);
   let [attempts, setAttempts] = useState<number>(1);
@@ -105,8 +107,6 @@ export default function Home() {
   let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
   const [webtype, setWebtype] = useState<string>('unknown');
 
-  let statuscode = 0;
-  let statustext = 0;
 
   let websitename = "test website";
   let websitetogetstatus = "http://localhost:1234/";
@@ -119,14 +119,14 @@ export default function Home() {
 
   useEffect(() => {
     overrideGlobalXHR() /* override the xhr to disable cors */
-    let webtype = 'unknown';
+    let webtype = 'not yet acquired';
 
     if (websitetogetstatus.startsWith("http://")) {
-      webtype = 'http';
+      setWebtype("http")
     } else if (websitetogetstatus.startsWith("https://")) {
-      webtype = 'https';
+      setWebtype("https")
     } else {
-      webtype = 'none';
+      setWebtype("unknown")
     }
 
     let checkStatus = async () => {
@@ -134,14 +134,14 @@ export default function Home() {
         let startTime = Date.now();
         let res = await axios.get(websitetogetstatus);
 
-        let statuscode = res.status;
-        let statustext = res.statusText;
+        setstatuscode(res.status);
+        setstatustext(res.statusText);
 
         let endTime = Date.now();
         setOnline(true);
 
         if (initialFirstOnline) {
-          toast.success("website is online!!!");
+          toast.success("website is online");
           initialFirstOffline = true;
           initialFirstOnline = false;
         }
@@ -166,8 +166,10 @@ export default function Home() {
         setFetching(false);
       } catch (error) {
         setOnline(false);
+        setstatuscode(408);
+        setstatustext('server cannot be reached');
         if (initialFirstOffline) {
-          toast.error("website is offline!!!");
+          toast.error("website is offline");
           initialFirstOffline = false;
           initialFirstOnline = true;
         }
@@ -362,12 +364,12 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2" className="shadow-lg">
                   <CardHeader className="pb-2">
-                    <CardDescription>average ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */}
+                    <CardDescription>average ping</CardDescription> { /* uses the raw value */}
                     <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */}
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      { /* unused subtext */}
+                      in the last {averagepingvaluetogetRAW} requests
                     </div>
                   </CardContent>
                   <CardFooter>
@@ -543,7 +545,7 @@ export default function Home() {
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
-                          web protocol
+                          protocol
                         </span>
                         <span>{webtype}</span>
                       </li>
