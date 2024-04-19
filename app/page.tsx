@@ -90,20 +90,18 @@ import axios from 'axios';
 
 
 export default function Home() {
-
   const [online, setOnline] = useState<boolean>(false);
   const [ping, setPing] = useState<number>(0);
   const [pingPercentage, setPingPercentage] = useState<number>(0);
   const [fetching, setFetching] = useState<boolean>(true);
+  const [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]);
 
   let websitename = "test website";
   let websitetogetstatus = "https://ps.ac.th";
   var pinglimit = "5000";
 
   useEffect(() => {
-    {/* useeffect (api fetch func core)  */ }
     const checkStatus = async () => {
-
       try {
         const startTime = Date.now();
         await axios.get(websitetogetstatus);
@@ -113,25 +111,32 @@ export default function Home() {
         setPing(currentPing);
         const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
         setPingPercentage(Number(percentage.toFixed(2)));
-        setFetching(false);
 
-        console.info(ping)
+        // Update ping history
+        setPingHistory(prevHistory => [
+          { ping: currentPing, status: "online", date: new Date().toLocaleString() },
+          ...prevHistory.slice(0, 4) // Keep only the latest 5 entries
+        ]);
+
+        setFetching(false);
       } catch (error) {
         setOnline(false);
         setPing(0);
         setPingPercentage(0);
         setFetching(false);
+
+        // Update ping history for offline status
+        setPingHistory(prevHistory => [
+          { ping: 0, status: "offline", date: new Date().toLocaleString() },
+          ...prevHistory.slice(0, 4) // Keep only the latest 5 entries
+        ]);
       }
     };
 
-    const interval = setInterval(() => {
-      checkStatus();
-    }, 1000); // Refresh every 1 seconds
+    const interval = setInterval(checkStatus, 1000); // Refresh every 1 second
 
-    // Clear interval on component unmount
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Clear interval on component unmount
   }, []);
-
 
   return (
     <main>
@@ -349,77 +354,48 @@ export default function Home() {
                   </div>
                 </div>
                 <TabsContent value="week">
-                  <Card x-chunk="dashboard-05-chunk-3">
-                    <CardHeader className="px-7">
-                      <CardTitle>Orders</CardTitle>
-                      <CardDescription>
-                        Recent orders from your store.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>request</TableHead>
-                            <TableHead className="hidden sm:table-cell">
-                              ping
-                            </TableHead>
-                            <TableHead className="hidden sm:table-cell">
-                              status
-                            </TableHead>
-                            <TableHead className="hidden md:table-cell">
-                              time
-                            </TableHead>
-                            <TableHead className="text-right">unused</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow className="bg-accent">
-                            <TableCell>
-                              <div className="font-medium">{websitename} N° {/* pingcount_history_2 (this is just showing how many ping already did) */}</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                {websitetogetstatus}
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              {/* PING_HISTORY_2 */}ms  {/* PING_HISTORY_2 is the saved number of how many ping already did, the older will be the bottom and the newer will be at the front */}
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="outline">
-                                online {/* should be var named STATUS_HISTORY_2 */}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2022/12/23 23:59:23 {/* PING_HISTORY_2_DATE */}
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell> { /* unused, dont care about this one */}
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">{websitename} N° {/* pingcount_history_1 (this is just showing how many ping already did) */}</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                {websitetogetstatus}
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              {/* PING_HISTORY_1 */}ms  {/* PING_HISTORY_1 is the saved number of how many ping already did */}
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="destructive">
-                                offline {/* should be var named STATUS_HISTORY_1 */}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2022/12/23 23:59:22 {/* PING_HISTORY_1_DATE */}
-                            </TableCell>
-                            <TableCell className="text-right">$150.00</TableCell> { /* unused, dont care about this one */}
-                          </TableRow>
-
-                        </TableBody>
-                      </Table>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+      <Card x-chunk="dashboard-05-chunk-3">
+        <CardHeader className="px-7">
+          <CardTitle>Orders</CardTitle>
+          <CardDescription>
+            Recent orders from your store.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>request</TableHead>
+                <TableHead className="hidden sm:table-cell">ping</TableHead>
+                <TableHead className="hidden sm:table-cell">status</TableHead>
+                <TableHead className="hidden md:table-cell">time</TableHead>
+                <TableHead className="text-right">unused</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {pingHistory.map((entry, index) => (
+                <TableRow key={index} className={entry.status === "offline" ? "bg-accent" : ""}>
+                  <TableCell>
+                    <div className="font-medium">{websitename} N° {index + 1}</div>
+                    <div className="hidden text-sm text-muted-foreground md:inline">
+                      {websitetogetstatus}
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">{entry.ping}ms</TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
+                      {entry.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
+                  <TableCell className="text-right">$250.00</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </TabsContent>
               </Tabs>
             </div>
             <div> {/* order card */}
