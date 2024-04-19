@@ -319,7 +319,7 @@ export default function Home() {
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2"> {/* all of the blocks are contained here, except reciept card */}
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"> {/* top row cards (fetcher, ping, avgms) */}
                 <Card
-                  className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
+                  className="sm:col-span-2 shadow-lg" x-chunk="dashboard-05-chunk-0"
                 >
                   <CardHeader className="pb-3">
                     <CardTitle>fetcher</CardTitle>
@@ -330,18 +330,18 @@ export default function Home() {
                   <CardFooter>
                     {/* Render different buttons based on the fetching state */}
                     {fetching ? (
-                      <Button disabled>
+                      <Button disabled className="shadow-lg">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         please wait while we make the first request
                       </Button>
                     ) : (
-                      <Button variant={online ? "default" : "destructive"}>
+                      <Button variant={online ? "default" : "destructive"} className="shadow-lg">
                         website is {online ? 'online' : 'offline'}
                       </Button>
                     )}
                   </CardFooter>
                 </Card>
-                <Card x-chunk="dashboard-05-chunk-1">
+                <Card x-chunk="dashboard-05-chunk-1" className="shadow-lg">
                   {!fetching && (
 
                     <div>
@@ -360,7 +360,7 @@ export default function Home() {
                     </div>
                   )}
                 </Card>
-                <Card x-chunk="dashboard-05-chunk-2">
+                <Card x-chunk="dashboard-05-chunk-2" className="shadow-lg">
                   <CardHeader className="pb-2">
                     <CardDescription>average ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */}
                     <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */}
@@ -378,7 +378,7 @@ export default function Home() {
               </div>
               <Tabs defaultValue="week"> {/* tabs that contain the lists */}
                 <div className="flex items-center">
-                  <TabsList>
+                  <TabsList className="shadow-sm">
                     <TabsTrigger value="week">Week</TabsTrigger>
                     <TabsTrigger value="month">Month</TabsTrigger>
                     <TabsTrigger value="year">Year</TabsTrigger>
@@ -389,7 +389,7 @@ export default function Home() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-7 gap-1 text-sm"
+                          className="h-7 gap-1 text-sm shadow-sm"
                         >
                           <ListFilter className="h-3.5 w-3.5" />
                           <span className="sr-only sm:not-sr-only">Filter</span>
@@ -412,7 +412,7 @@ export default function Home() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="h-7 gap-1 text-sm"
+                      className="h-7 gap-1 text-sm shadow-sm"
                     >
                       <File className="h-3.5 w-3.5" />
                       <span className="sr-only sm:not-sr-only">Export</span>
@@ -420,7 +420,7 @@ export default function Home() {
                   </div>
                 </div>
                 <TabsContent value="week">
-                  <Card x-chunk="dashboard-05-chunk-3">
+                  <Card x-chunk="dashboard-05-chunk-3" className="shadow-lg">
                     <CardHeader className="px-7">
                       <CardTitle>ping history</CardTitle>
                       <CardDescription>
@@ -473,7 +473,7 @@ export default function Home() {
             </div>
             <div> {/* order card */}
               <Card
-                className="overflow-hidden" x-chunk="dashboard-05-chunk-4"
+                className="overflow-hidden shadow-lg" x-chunk="dashboard-05-chunk-4"
               >
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
