@@ -593,10 +593,12 @@ export default function Home() {
                   <div className="grid gap-3">
                     <div className="font-semibold">About</div>
                     <dl className="grid gap-3">
-                      <div className="flex items-center justify-between">
-                        <dt className="flex items-center gap-1 text-muted-foreground">
-                        <p>Server type : HTTPS  </p>
-                        <p>Creation date : 00/00/00</p>
+                      <div>
+                        <dt className="text-muted-foreground">
+                          <p>Server type : HTTPS</p>
+                        </dt>
+                        <dt className="text-muted-foreground">
+                          <p>Creation date: 09/11/01</p>
                         </dt>
                       </div>
                     </dl>
