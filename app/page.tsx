@@ -88,9 +88,7 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip"
 import { overrideGlobalXHR } from 'tauri-xhr'
-overrideGlobalXHR() /* override the xhr to disable cors */
 import axios from 'axios';
-import dynamic from 'next/dynamic'
 
 
 let initialFirstOffline = false;
@@ -105,12 +103,14 @@ export default function Home() {
   let [attempts, setAttempts] = useState<number>(1);
   let [pingChanges, setPingChanges] = useState<Array<number>>([]);
   let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
+  const [webtype, setWebtype] = useState<string>('unknown');
 
   let statuscode = 0;
   let statustext = 0;
 
   let websitename = "test website";
   let websitetogetstatus = "http://localhost:1234/";
+
   var pinglimit = "1000";
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
@@ -118,6 +118,17 @@ export default function Home() {
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
+    overrideGlobalXHR() /* override the xhr to disable cors */
+    let webtype = 'unknown';
+
+    if (websitetogetstatus.startsWith("http://")) {
+      webtype = 'http';
+    } else if (websitetogetstatus.startsWith("https://")) {
+      webtype = 'https';
+    } else {
+      webtype = 'none';
+    }
+
     let checkStatus = async () => {
       try {
         let startTime = Date.now();
@@ -255,18 +266,18 @@ export default function Home() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="#">Dashboard</Link>
+                    <Link href="https://github.com/pickingname/get">dash</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="#">Orders</Link>
+                    <Link href={websitetogetstatus}>{websitename}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Recent Orders</BreadcrumbPage>
+                  <BreadcrumbPage>{websitetogetstatus}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -274,7 +285,7 @@ export default function Home() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search..."
+                placeholder="another website"
                 className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
               />
             </div>
@@ -360,7 +371,8 @@ export default function Home() {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={12} aria-label="12% increase" />
+                    {/* <Progress value={12} aria-label="12% increase" /> */}
+
                   </CardFooter>
                 </Card>
               </div>
@@ -529,6 +541,12 @@ export default function Home() {
                         </span>
                         <span>{statustext}</span>
                       </li>
+                      <li className="flex items-center justify-between">
+                        <span className="text-muted-foreground">
+                          web protocol
+                        </span>
+                        <span>{webtype}</span>
+                      </li>
                     </ul>
                     {/* <Separator className="my-2" />
                     <ul className="grid gap-3">
@@ -595,8 +613,8 @@ export default function Home() {
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="flex items-center gap-1 text-muted-foreground">
-                        <p>Server type : HTTPS  </p>
-                        <p>Creation date : 00/00/00</p>
+                          <p>server type</p>
+                          <p>Creation date : 00/00/00</p>
                         </dt>
                       </div>
                     </dl>
