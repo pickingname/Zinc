@@ -596,13 +596,13 @@ export default function Home() {
                     <div className="grid gap-3">
                       <div className="font-semibold">uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        total uptime
+                        insert total uptime here
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
                       <div className="font-semibold">downtime</div>
                       <div className="text-muted-foreground">
-                        total downtime
+                        insert total downtime here
                       </div>
                     </div>
                   </div>
