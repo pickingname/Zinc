@@ -172,7 +172,7 @@ export default function Home() {
   let averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
 
   return (
-    <main>
+    <main className="font-outfit">
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
