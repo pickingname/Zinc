@@ -92,24 +92,26 @@ overrideGlobalXHR() /* override the xhr to disable cors */
 import axios from 'axios';
 
 
-export default function Home() {
-  let [online, setOnline] = useState<boolean>(false); // is online or not
-  let [ping, setPing] = useState<number>(0); // pingcount
-  let [pingPercentage, setPingPercentage] = useState<number>(0); // percentage of the ping (max of % of {pinglimit})
-  let [fetching, setFetching] = useState<boolean>(true); // will it be fetching or not (is a bool)
-  let [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]); // array of the ping history
-  let [attempts, setAttempts] = useState<number>(1); // not used yet
-  let [pingChanges, setPingChanges] = useState<Array<number>>([]); // init the array for tracking the incrase and decrease of the ping value
-  let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]); // array to store last 10 ping values
+let initialFirstOffline = false;
+let initialFirstOnline = true;
 
-  // these will be customizable on startup soon
+export default function Home() {
+  let [online, setOnline] = useState<boolean>(false);
+  let [ping, setPing] = useState<number>(0);
+  let [pingPercentage, setPingPercentage] = useState<number>(0);
+  let [fetching, setFetching] = useState<boolean>(true);
+  let [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]);
+  let [attempts, setAttempts] = useState<number>(1);
+  let [pingChanges, setPingChanges] = useState<Array<number>>([]);
+  let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
+
   let websitename = "test website";
   let websitetogetstatus = "http://localhost:1234/";
   var pinglimit = "5000";
   let averagepingvaluetogetRAW = 10;
-  let to_round = 1; // config for the rounding of the values
+  let to_round = 1;
 
-  let averagepingvaluetoget = averagepingvaluetogetRAW - 1; // delete 1 cause js is 0 based / start from 0
+  let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
     let checkStatus = async () => {
@@ -118,49 +120,55 @@ export default function Home() {
         await axios.get(websitetogetstatus);
         let endTime = Date.now();
         setOnline(true);
+        
+        if (initialFirstOnline) {
+          toast.success("website is online!!!");
+          initialFirstOffline = true;
+          initialFirstOnline = false;
+        }
+
         let currentPing = endTime - startTime;
         setPing(currentPing);
         let percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
         setPingPercentage(Number(percentage.toFixed(to_round)));
 
-        // calculate percentage change from the last ping
         if (pingHistory.length > 0) {
           let lastPing = pingHistory[0].ping;
           let change = ((currentPing - lastPing) / lastPing) * 100;
-          setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]); // Keep only the latest 5 changes
+          setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]);
         }
 
-        // Update ping history
         setPingHistory(prevHistory => [
           { ping: currentPing, status: "online", date: new Date().toLocaleString() },
-          ...prevHistory.slice(0, 4) // Keep only the latest 5 entries
+          ...prevHistory.slice(0, 4)
         ]);
 
-        // update last ten ping values
-        setLastTenPingValues(prevValues => [currentPing, ...prevValues.slice(0, averagepingvaluetoget)]); // keep only the latest 10 values
-
+        setLastTenPingValues(prevValues => [currentPing, ...prevValues.slice(0, averagepingvaluetoget)]);
         setFetching(false);
       } catch (error) {
-        toast.warn("website is down!!!");
+        setOnline(false);
+        if (initialFirstOffline) {
+          toast.error("website is offline!!!");
+          initialFirstOffline = false;
+          initialFirstOnline = true;
+        }
         setOnline(false);
         setPing(0);
         setPingPercentage(0);
         setFetching(false);
 
-        // Update ping history for offline status
         setPingHistory(prevHistory => [
           { ping: 0, status: "offline", date: new Date().toLocaleString() },
-          ...prevHistory.slice(0, 4) // Keep only the latest 5 entries
+          ...prevHistory.slice(0, 4)
         ]);
       }
     };
 
-    let interval = setInterval(checkStatus, 1000); // Refresh every 1 second
+    let interval = setInterval(checkStatus, 1000);
 
-    return () => clearInterval(interval); // Clear interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
-  // Calculate average ping from last ten requests
   let averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
 
   return (
