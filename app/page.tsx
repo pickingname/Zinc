@@ -2,7 +2,7 @@
 
 {/* imports */ }
 import Image from "next/image"
-import { Loader2 } from "lucide-react"
+import { Loader2, Tornado } from "lucide-react"
 
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -104,6 +104,7 @@ export default function Home() {
   let websitetogetstatus = "https://ps.ac.th";
   var pinglimit = "5000";
   let averagepingvaluetogetRAW = 10;
+  let to_round = 1; // config for the rounding of the values
 
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1; // delete 1 cause js is 0 based / start from 0
 
@@ -117,7 +118,7 @@ export default function Home() {
         const currentPing = endTime - startTime;
         setPing(currentPing);
         const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
-        setPingPercentage(Number(percentage.toFixed(2)));
+        setPingPercentage(Number(percentage.toFixed(to_round)));
 
         // calculate percentage change from the last ping
         if (pingHistory.length > 0) {
@@ -318,7 +319,7 @@ export default function Home() {
                 <Card x-chunk="dashboard-05-chunk-2">
                   <CardHeader className="pb-2">
                     <CardDescription>avg ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */ }
-                    <CardTitle className="text-4xl">{averagePing.toFixed(2)}ms</CardTitle>
+                    <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */ }
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
@@ -412,7 +413,7 @@ export default function Home() {
                                 {index > 0 && pingChanges[index - 1] !== undefined ? (
                                   <>
                                     {pingChanges[index - 1] > 0 ? "+" : ""}
-                                    {pingChanges[index - 1].toFixed(2)}%
+                                    {pingChanges[index - 1].toFixed(to_round)}%
                                   </>
                                 ) : null}
                               </TableCell>
