@@ -93,6 +93,8 @@ import axios from 'axios';
 
 let initialFirstOffline = false;
 let initialFirstOnline = true;
+const appstarttime = new Date().toLocaleString() + ''
+
 
 export default function Home() {
   let [online, setOnline] = useState<boolean>(false);
@@ -106,6 +108,7 @@ export default function Home() {
   let [pingChanges, setPingChanges] = useState<Array<number>>([]);
   let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
   const [webtype, setWebtype] = useState<string>('unknown');
+  let [totalRequests, setTotalRequests] = useState<number>(0);
 
 
   let websitename = "test website";
@@ -131,6 +134,7 @@ export default function Home() {
 
     let checkStatus = async () => {
       try {
+        setTotalRequests(prevTotal => prevTotal + 1);
         let startTime = Date.now();
         let res = await axios.get(websitetogetstatus);
 
@@ -589,16 +593,16 @@ export default function Home() {
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">Customer Information</div>
+                    <div className="font-semibold">application information</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">Customer</dt>
-                        <dd>Liam Johnson</dd>
+                        <dt className="text-muted-foreground">start date</dt>
+                        <dd suppressHydrationWarning>{appstarttime}</dd>
                       </div>
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">Email</dt>
+                        <dt className="text-muted-foreground">total requests</dt>
                         <dd>
-                          <a href="mailto:">liam@acme.com</a>
+                          <a href="mailto:">{totalRequests}</a>
                         </dd>
                       </div>
                       <div className="flex items-center justify-between">
