@@ -111,8 +111,10 @@ export default function Home() {
   let [totalRequests, setTotalRequests] = useState<number>(0);
 
 
-  let websitename = "test website";
-  let websitetogetstatus = "http://localhost:1234/";
+  let websitename = "localhost test website";
+  let websitetogetstatus = "https://google.com";
+
+  const thumblink = "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   var pinglimit = "1000";
   let averagepingvaluetogetRAW = 10;
@@ -137,7 +139,6 @@ export default function Home() {
         setTotalRequests(prevTotal => prevTotal + 1);
         let startTime = Date.now();
         let res = await axios.get(websitetogetstatus);
-
         setstatuscode(res.status);
         setstatustext(res.statusText);
 
@@ -288,12 +289,12 @@ export default function Home() {
               </BreadcrumbList>
             </Breadcrumb>
             <div className="relative ml-auto flex-1 md:grow-0">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              {/* <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="another website"
                 className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-              />
+              /> */}
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -302,13 +303,9 @@ export default function Home() {
                   size="icon"
                   className="overflow-hidden rounded-full"
                 >
-                  <Image
-                    src="https://www.redditstatic.com/shreddit/assets/favicon/64x64.png"
-                    width={36}
-                    height={36}
-                    alt="Avatar"
-                    className="overflow-hidden rounded-full"
-                  />
+                  <div className={online ? " w-full h-full bg-green-500 animate-pulse" : " w-full h-full bg-red-500 animate-pulse"}>
+
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
