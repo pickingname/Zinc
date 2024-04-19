@@ -1,6 +1,7 @@
 "use client";
 
 {/* imports */ }
+import { ModeToggle } from '@/components/ui/themechanger'
 import Image from "next/image"
 import { Loader2, Tornado } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -515,7 +516,8 @@ export default function Home() {
                         Track Order
                       </span>
                     </Button> */}
-                    <AlertDialog>
+
+                    {/* <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button size="icon" variant="outline" className="h-8 w-8">
                           <Gauge className="h-3.5 w-3.5" />
@@ -533,7 +535,9 @@ export default function Home() {
                           <AlertDialogCancel>close</AlertDialogCancel>
                         </AlertDialogFooter>
                       </AlertDialogContent>
-                    </AlertDialog>
+                    </AlertDialog> */}
+
+                    <ModeToggle />
                   </div>
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
