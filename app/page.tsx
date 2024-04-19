@@ -627,7 +627,7 @@ export default function Home() {
                       <div className="flex items-center justify-between">
                         <dt className="text-muted-foreground">total requests</dt>
                         <dd>
-                          <a href="mailto:">{totalRequests}</a>
+                          <a>{totalRequests}</a>
                         </dd>
                       </div>
                       <div className="flex items-center justify-between font-outfit">
