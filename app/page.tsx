@@ -168,6 +168,9 @@ export default function Home() {
 
         if (initialFirstOnline) {
           toast.success("website is online");
+          new Audio(
+            "https://pickingname.github.io/datastores/get/sounds/yes.mp3"
+          ).play();
           initialFirstOffline = true;
           initialFirstOnline = false;
         }
@@ -196,6 +199,9 @@ export default function Home() {
         setstatustext('server cannot be reached');
         if (initialFirstOffline) {
           toast.error("website is offline");
+                    new Audio(
+                      "https://pickingname.github.io/datastores/get/sounds/no.mp3"
+                    ).play();
           initialFirstOffline = false;
           initialFirstOnline = true;
         }
