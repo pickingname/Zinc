@@ -97,11 +97,15 @@ export default function Home() {
   const [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]); // array of the ping history
   const [attempts, setAttempts] = useState<number>(1); // not used yet
   const [pingChanges, setPingChanges] = useState<Array<number>>([]); // init the array for tracking the incrase and decrease of the ping value
+  const [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]); // array to store last 10 ping values
 
   // these will be customizable on startup soon
   let websitename = "test website";
   let websitetogetstatus = "https://ps.ac.th";
   var pinglimit = "5000";
+  let averagepingvaluetogetRAW = 10;
+
+  let averagepingvaluetoget = averagepingvaluetogetRAW - 1; // delete 1 cause js is 0 based / start from 0
 
   useEffect(() => {
     const checkStatus = async () => {
@@ -128,6 +132,9 @@ export default function Home() {
           ...prevHistory.slice(0, 4) // Keep only the latest 5 entries
         ]);
 
+        // update last ten ping values
+        setLastTenPingValues(prevValues => [currentPing, ...prevValues.slice(0, averagepingvaluetoget)]); // keep only the latest 10 values
+
         setFetching(false);
       } catch (error) {
         setOnline(false);
@@ -147,6 +154,9 @@ export default function Home() {
 
     return () => clearInterval(interval); // Clear interval on component unmount
   }, []);
+
+  // Calculate average ping from last ten requests
+  const averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
 
   return (
     <main>
@@ -307,12 +317,12 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2">
                   <CardHeader className="pb-2">
-                    <CardDescription>This Month</CardDescription>
-                    <CardTitle className="text-4xl">$5,329</CardTitle>
+                    <CardDescription>avg ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */ }
+                    <CardTitle className="text-4xl">{averagePing.toFixed(2)}ms</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      +10% from last month
+                    { /* unused subtext */ }
                     </div>
                   </CardContent>
                   <CardFooter>
