@@ -88,7 +88,6 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip"
 import { overrideGlobalXHR } from 'tauri-xhr'
-overrideGlobalXHR() /* override the xhr to disable cors */
 import axios from 'axios';
 
 
@@ -104,23 +103,43 @@ export default function Home() {
   let [attempts, setAttempts] = useState<number>(1);
   let [pingChanges, setPingChanges] = useState<Array<number>>([]);
   let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
+  const [webtype, setWebtype] = useState<string>('unknown');
+
+  let statuscode = 0;
+  let statustext = 0;
 
   let websitename = "test website";
   let websitetogetstatus = "http://localhost:1234/";
-  var pinglimit = "5000";
+
+  var pinglimit = "1000";
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
+    overrideGlobalXHR() /* override the xhr to disable cors */
+    let webtype = 'unknown';
+
+    if (websitetogetstatus.startsWith("http://")) {
+      webtype = 'http';
+    } else if (websitetogetstatus.startsWith("https://")) {
+      webtype = 'https';
+    } else {
+      webtype = 'none';
+    }
+
     let checkStatus = async () => {
       try {
         let startTime = Date.now();
-        await axios.get(websitetogetstatus);
+        let res = await axios.get(websitetogetstatus);
+
+        let statuscode = res.status;
+        let statustext = res.statusText;
+
         let endTime = Date.now();
         setOnline(true);
-        
+
         if (initialFirstOnline) {
           toast.success("website is online!!!");
           initialFirstOffline = true;
@@ -172,7 +191,7 @@ export default function Home() {
   let averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
 
   return (
-    <main>
+    <main className="font-outfit">
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
@@ -185,7 +204,7 @@ export default function Home() {
         pauseOnHover
         theme="dark"
         transition={Bounce}
-        /> 
+      />
       <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14"> {/* main div */}
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
@@ -247,18 +266,18 @@ export default function Home() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="#">Dashboard</Link>
+                    <Link href="https://github.com/pickingname/get">dash</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="#">Orders</Link>
+                    <Link href={websitetogetstatus}>{websitename}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Recent Orders</BreadcrumbPage>
+                  <BreadcrumbPage>{websitetogetstatus}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -266,7 +285,7 @@ export default function Home() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search..."
+                placeholder="another website"
                 className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
               />
             </div>
@@ -343,16 +362,17 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2">
                   <CardHeader className="pb-2">
-                    <CardDescription>avg ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */ }
-                    <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */ }
+                    <CardDescription>average ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */}
+                    <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */}
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                    { /* unused subtext */ }
+                      { /* unused subtext */}
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={12} aria-label="12% increase" />
+                    {/* <Progress value={12} aria-label="12% increase" /> */}
+
                   </CardFooter>
                 </Card>
               </div>
@@ -458,7 +478,7 @@ export default function Home() {
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
                     <CardTitle className="group flex items-center gap-2 text-lg">
-                      Order Oe31b70H
+                      {websitename}
                       <Button
                         size="icon"
                         variant="outline"
@@ -468,15 +488,15 @@ export default function Home() {
                         <span className="sr-only">Copy Order ID</span>
                       </Button>
                     </CardTitle>
-                    <CardDescription>Date: November 23, 2023</CardDescription>
+                    <CardDescription>{websitetogetstatus}</CardDescription>
                   </div>
                   <div className="ml-auto flex items-center gap-1">
-                    <Button size="sm" variant="outline" className="h-8 gap-1">
+                    { /* <Button size="sm" variant="outline" className="h-8 gap-1">
                       <Truck className="h-3.5 w-3.5" />
                       <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
                         Track Order
                       </span>
-                    </Button>
+                    </Button> */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button size="icon" variant="outline" className="h-8 w-8">
@@ -488,29 +508,47 @@ export default function Home() {
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                         <DropdownMenuItem>Export</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Trash</DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
-                    <div className="font-semibold">Order Details</div>
+                    <div className="font-semibold">website details</div>
                     <ul className="grid gap-3">
-                      <li className="flex items-center justify-between">
+                      {/*<li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
                           Glimmer Lamps x <span>2</span>
-                        </span>
+                        </span>}
                         <span>$250.00</span>
+                      </li>*/}
+                      <li className="flex items-center justify-between">
+                        <span className="text-muted-foreground">
+                          status
+                        </span>
+                        <span>{online ? 'online' : 'offline'}</span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
-                          Aqua Filters x <span>1</span>
+                          status code
                         </span>
-                        <span>$49.00</span>
+                        <span>{statuscode}</span>
+                      </li>
+                      <li className="flex items-center justify-between">
+                        <span className="text-muted-foreground">
+                          status text
+                        </span>
+                        <span>{statustext}</span>
+                      </li>
+                      <li className="flex items-center justify-between">
+                        <span className="text-muted-foreground">
+                          web protocol
+                        </span>
+                        <span>{webtype}</span>
                       </li>
                     </ul>
-                    <Separator className="my-2" />
+                    {/* <Separator className="my-2" />
                     <ul className="grid gap-3">
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">Subtotal</span>
@@ -528,12 +566,12 @@ export default function Home() {
                         <span className="text-muted-foreground">Total</span>
                         <span>$329.00</span>
                       </li>
-                    </ul>
+                    </ul> */}
                   </div>
                   <Separator className="my-4" />
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
-                      <div className="font-semibold">Shipping Information</div>
+                      <div className="font-semibold">Uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
                         <span>Liam Johnson</span>
                         <span>1234 Main St.</span>
@@ -541,7 +579,7 @@ export default function Home() {
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
-                      <div className="font-semibold">Billing Information</div>
+                      <div className="font-semibold">Downtime</div>
                       <div className="text-muted-foreground">
                         Same as shipping address
                       </div>
@@ -571,19 +609,18 @@ export default function Home() {
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">Payment Information</div>
+                    <div className="font-semibold">About</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="flex items-center gap-1 text-muted-foreground">
-                          <CreditCard className="h-4 w-4" />
-                          Visa
+                          <p>server type</p>
+                          <p>Creation date : 00/00/00</p>
                         </dt>
-                        <dd>**** **** **** 4532</dd>
                       </div>
                     </dl>
                   </div>
                 </CardContent>
-                <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+                {/*<CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                   <div className="text-xs text-muted-foreground">
                     Updated <time dateTime="2023-11-23">November 23, 2023</time>
                   </div>
@@ -603,7 +640,7 @@ export default function Home() {
                       </PaginationItem>
                     </PaginationContent>
                   </Pagination>
-                </CardFooter>
+                    </CardFooter>*/}
               </Card>
             </div>
           </main>
