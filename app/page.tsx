@@ -1,6 +1,7 @@
 "use client";
 
-import Image from "next/image"
+{/* imports */}
+import Image from "next/image" 
 import { Loader2 } from "lucide-react"
 
 import { useState } from 'react';
@@ -84,10 +85,12 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip"
 import { overrideGlobalXHR } from 'tauri-xhr'
-overrideGlobalXHR()
+overrideGlobalXHR() /* override the xhr to disable cors */
 import axios from 'axios';
 
+
 export default function Home() {
+
   const [online, setOnline] = useState<boolean>(false);
   const [ping, setPing] = useState<number>(0);
   const [pingPercentage, setPingPercentage] = useState<number>(0);
@@ -96,7 +99,7 @@ export default function Home() {
   let websitetogetstatus = "https://ps.ac.th";
   var pinglimit = "5000";
 
-  useEffect(() => {
+  useEffect(() => { {/* useeffect (api fetch func core)  */}
     const checkStatus = async () => {
 
       try {
@@ -131,8 +134,8 @@ export default function Home() {
   return (
     <main>
       <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14"> {/* main div */}
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
             <Sheet>
               <SheetTrigger asChild>
                 <Button size="icon" variant="outline" className="sm:hidden">
@@ -240,9 +243,9 @@ export default function Home() {
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"> {/* main dashboard that contains the blocks and grids */}
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2"> {/* all of the blocks are contained here, except reciept card */}
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"> {/* top row cards (fetcher, ping, avgms) */}
                 <Card
                   className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
                 >
@@ -300,7 +303,7 @@ export default function Home() {
                   </CardFooter>
                 </Card>
               </div>
-              <Tabs defaultValue="week">
+              <Tabs defaultValue="week"> {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <TabsList>
                     <TabsTrigger value="week">Week</TabsTrigger>
@@ -536,7 +539,7 @@ export default function Home() {
                 </TabsContent>
               </Tabs>
             </div>
-            <div>
+            <div> {/* order card */}
               <Card
                 className="overflow-hidden" x-chunk="dashboard-05-chunk-4"
               >

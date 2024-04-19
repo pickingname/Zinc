@@ -61,10 +61,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 1100,
         "resizable": true,
         "title": "get",
-        "width": 800
+        "width": 1500
       }
     ]
   }
