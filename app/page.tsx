@@ -1,7 +1,7 @@
 "use client";
 
-{/* imports */}
-import Image from "next/image" 
+{/* imports */ }
+import Image from "next/image"
 import { Loader2 } from "lucide-react"
 
 import { useState } from 'react';
@@ -96,10 +96,12 @@ export default function Home() {
   const [pingPercentage, setPingPercentage] = useState<number>(0);
   const [fetching, setFetching] = useState<boolean>(true);
 
+  let websitename = "test website";
   let websitetogetstatus = "https://ps.ac.th";
   var pinglimit = "5000";
 
-  useEffect(() => { {/* useeffect (api fetch func core)  */}
+  useEffect(() => {
+    {/* useeffect (api fetch func core)  */ }
     const checkStatus = async () => {
 
       try {
@@ -245,7 +247,7 @@ export default function Home() {
           </header>
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"> {/* main dashboard that contains the blocks and grids */}
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2"> {/* all of the blocks are contained here, except reciept card */}
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"> {/* top row cards (fetcher, ping, avgms) */}
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"> {/* top row cards (fetcher, ping, avgms) */}
                 <Card
                   className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
                 >
@@ -358,180 +360,61 @@ export default function Home() {
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Customer</TableHead>
+                            <TableHead>request</TableHead>
                             <TableHead className="hidden sm:table-cell">
-                              Type
+                              ping
                             </TableHead>
                             <TableHead className="hidden sm:table-cell">
-                              Status
+                              status
                             </TableHead>
                             <TableHead className="hidden md:table-cell">
-                              Date
+                              time
                             </TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead className="text-right">unused</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           <TableRow className="bg-accent">
                             <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
+                              <div className="font-medium">{websitename} N° {/* pingcount_history_2 (this is just showing how many ping already did) */}</div>
                               <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
+                                {websitetogetstatus}
                               </div>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Olivia Smith</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                olivia@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Refund
+                              {/* PING_HISTORY_2 */}ms  {/* PING_HISTORY_2 is the saved number of how many ping already did, the older will be the bottom and the newer will be at the front */}
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">
                               <Badge className="text-xs" variant="outline">
-                                Declined
+                                online {/* should be var named STATUS_HISTORY_2 */}
                               </Badge>
                             </TableCell>
                             <TableCell className="hidden md:table-cell">
-                              2023-06-24
+                              2022/12/23 23:59:23 {/* PING_HISTORY_2_DATE */}
                             </TableCell>
-                            <TableCell className="text-right">$150.00</TableCell>
+                            <TableCell className="text-right">$250.00</TableCell> { /* unused, dont care about this one */}
                           </TableRow>
                           <TableRow>
                             <TableCell>
-                              <div className="font-medium">Noah Williams</div>
+                              <div className="font-medium">{websitename} N° {/* pingcount_history_1 (this is just showing how many ping already did) */}</div>
                               <div className="hidden text-sm text-muted-foreground md:inline">
-                                noah@example.com
+                                {websitetogetstatus}
                               </div>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">
-                              Subscription
+                              {/* PING_HISTORY_1 */}ms  {/* PING_HISTORY_1 is the saved number of how many ping already did */}
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
+                              <Badge className="text-xs" variant="destructive">
+                                offline {/* should be var named STATUS_HISTORY_1 */}
                               </Badge>
                             </TableCell>
                             <TableCell className="hidden md:table-cell">
-                              2023-06-25
+                              2022/12/23 23:59:22 {/* PING_HISTORY_1_DATE */}
                             </TableCell>
-                            <TableCell className="text-right">$350.00</TableCell>
+                            <TableCell className="text-right">$150.00</TableCell> { /* unused, dont care about this one */}
                           </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Emma Brown</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                emma@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-26
-                            </TableCell>
-                            <TableCell className="text-right">$450.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Olivia Smith</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                olivia@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Refund
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="outline">
-                                Declined
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-24
-                            </TableCell>
-                            <TableCell className="text-right">$150.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Emma Brown</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                emma@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-26
-                            </TableCell>
-                            <TableCell className="text-right">$450.00</TableCell>
-                          </TableRow>
+
                         </TableBody>
                       </Table>
                     </CardContent>
