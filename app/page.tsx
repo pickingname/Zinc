@@ -90,18 +90,18 @@ import axios from 'axios';
 
 
 export default function Home() {
-  const [online, setOnline] = useState<boolean>(false); // is online or not
-  const [ping, setPing] = useState<number>(0); // pingcount
-  const [pingPercentage, setPingPercentage] = useState<number>(0); // percentage of the ping (max of % of {pinglimit})
-  const [fetching, setFetching] = useState<boolean>(true); // will it be fetching or not (is a bool)
-  const [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]); // array of the ping history
-  const [attempts, setAttempts] = useState<number>(1); // not used yet
-  const [pingChanges, setPingChanges] = useState<Array<number>>([]); // init the array for tracking the incrase and decrease of the ping value
-  const [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]); // array to store last 10 ping values
+  let [online, setOnline] = useState<boolean>(false); // is online or not
+  let [ping, setPing] = useState<number>(0); // pingcount
+  let [pingPercentage, setPingPercentage] = useState<number>(0); // percentage of the ping (max of % of {pinglimit})
+  let [fetching, setFetching] = useState<boolean>(true); // will it be fetching or not (is a bool)
+  let [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]); // array of the ping history
+  let [attempts, setAttempts] = useState<number>(1); // not used yet
+  let [pingChanges, setPingChanges] = useState<Array<number>>([]); // init the array for tracking the incrase and decrease of the ping value
+  let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]); // array to store last 10 ping values
 
   // these will be customizable on startup soon
   let websitename = "test website";
-  let websitetogetstatus = "https://ps.ac.th";
+  let websitetogetstatus = "http://localhost:1234/";
   var pinglimit = "5000";
   let averagepingvaluetogetRAW = 10;
   let to_round = 1; // config for the rounding of the values
@@ -109,21 +109,21 @@ export default function Home() {
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1; // delete 1 cause js is 0 based / start from 0
 
   useEffect(() => {
-    const checkStatus = async () => {
+    let checkStatus = async () => {
       try {
-        const startTime = Date.now();
+        let startTime = Date.now();
         await axios.get(websitetogetstatus);
-        const endTime = Date.now();
+        let endTime = Date.now();
         setOnline(true);
-        const currentPing = endTime - startTime;
+        let currentPing = endTime - startTime;
         setPing(currentPing);
-        const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
+        let percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
         setPingPercentage(Number(percentage.toFixed(to_round)));
 
         // calculate percentage change from the last ping
         if (pingHistory.length > 0) {
-          const lastPing = pingHistory[0].ping;
-          const change = ((currentPing - lastPing) / lastPing) * 100;
+          let lastPing = pingHistory[0].ping;
+          let change = ((currentPing - lastPing) / lastPing) * 100;
           setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]); // Keep only the latest 5 changes
         }
 
@@ -151,13 +151,13 @@ export default function Home() {
       }
     };
 
-    const interval = setInterval(checkStatus, 1000); // Refresh every 1 second
+    let interval = setInterval(checkStatus, 1000); // Refresh every 1 second
 
     return () => clearInterval(interval); // Clear interval on component unmount
   }, []);
 
   // Calculate average ping from last ten requests
-  const averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
+  let averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
 
   return (
     <main>
@@ -291,7 +291,7 @@ export default function Home() {
                         please wait while we make the first request
                       </Button>
                     ) : (
-                      <Button>
+                      <Button variant={online ? "default" : "destructive"}>
                         website is {online ? 'online' : 'offline'}
                       </Button>
                     )}
