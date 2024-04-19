@@ -394,9 +394,9 @@ export default function Home() {
               <Tabs defaultValue="week"> {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <TabsList className="shadow-sm">
-                    <TabsTrigger value="week">Week</TabsTrigger>
-                    <TabsTrigger value="month">Month</TabsTrigger>
-                    <TabsTrigger value="year">Year</TabsTrigger>
+                    <TabsTrigger value="week">week</TabsTrigger>
+                    <TabsTrigger value="month">month</TabsTrigger>
+                    <TabsTrigger value="year">year</TabsTrigger>
                   </TabsList>
                   <div className="ml-auto flex items-center gap-2">
                     <DropdownMenu>
@@ -407,20 +407,20 @@ export default function Home() {
                           className="h-7 gap-1 text-sm shadow-sm"
                         >
                           <ListFilter className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only">Filter</span>
+                          <span className="sr-only sm:not-sr-only">filter</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                        <DropdownMenuLabel>filter by</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuCheckboxItem checked>
-                          Fulfilled
+                          fullfilled
                         </DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem>
-                          Declined
+                          dec
                         </DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem>
-                          Refunded
+                          ref
                         </DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -430,7 +430,7 @@ export default function Home() {
                       className="h-7 gap-1 text-sm shadow-sm"
                     >
                       <File className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Export</span>
+                      <span className="sr-only sm:not-sr-only">export</span>
                     </Button>
                   </div>
                 </div>
@@ -586,17 +586,15 @@ export default function Home() {
                   <Separator className="my-4" />
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
-                      <div className="font-semibold">Uptime</div>
+                      <div className="font-semibold">uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        <span>Liam Johnson</span>
-                        <span>1234 Main St.</span>
-                        <span>Anytown, CA 12345</span>
+                        uptime
                       </address>
-                    </div>
+                    </div>uptime
                     <div className="grid auto-rows-max gap-3">
-                      <div className="font-semibold">Downtime</div>
+                      <div className="font-semibold">downtime</div>
                       <div className="text-muted-foreground">
-                        Same as shipping address
+                        downtime
                       </div>
                     </div>
                   </div>
