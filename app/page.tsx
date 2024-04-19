@@ -174,7 +174,7 @@ export default function Home() {
   return (
     <main>
       <ToastContainer
-        position="top-right"
+        position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={true}

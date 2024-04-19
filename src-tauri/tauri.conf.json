@@ -35,7 +35,7 @@
         "icons/icon.ico"
       ],
       "identifier": "dev.pickingname.get",
-      "longDescription": "",
+      "longDescription": "application that pings the server and see the status of the server",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -64,7 +64,9 @@
         "height": 1100,
         "resizable": true,
         "title": "get",
-        "width": 1500
+        "width": 1500,
+        "minHeight": 260,
+        "minWidth": 380
       }
     ]
   }
