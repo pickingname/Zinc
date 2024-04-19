@@ -90,12 +90,15 @@ import axios from 'axios';
 
 
 export default function Home() {
-  const [online, setOnline] = useState<boolean>(false);
-  const [ping, setPing] = useState<number>(0);
-  const [pingPercentage, setPingPercentage] = useState<number>(0);
-  const [fetching, setFetching] = useState<boolean>(true);
-  const [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]);
+  const [online, setOnline] = useState<boolean>(false); // is online or not
+  const [ping, setPing] = useState<number>(0); // pingcount
+  const [pingPercentage, setPingPercentage] = useState<number>(0); // percentage of the ping (max of % of {pinglimit})
+  const [fetching, setFetching] = useState<boolean>(true); // will it be fetching or not (is a bool)
+  const [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]); // array of the ping history
+  const [attempts, setAttempts] = useState<number>(1); // not used yet
+  const [pingChanges, setPingChanges] = useState<Array<number>>([]); // init the array for tracking the incrase and decrease of the ping value
 
+  // these will be customizable on startup soon
   let websitename = "test website";
   let websitetogetstatus = "https://ps.ac.th";
   var pinglimit = "5000";
@@ -111,6 +114,13 @@ export default function Home() {
         setPing(currentPing);
         const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
         setPingPercentage(Number(percentage.toFixed(2)));
+
+        // calculate percentage change from the last ping
+        if (pingHistory.length > 0) {
+          const lastPing = pingHistory[0].ping;
+          const change = ((currentPing - lastPing) / lastPing) * 100;
+          setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]); // Keep only the latest 5 changes
+        }
 
         // Update ping history
         setPingHistory(prevHistory => [
@@ -354,48 +364,55 @@ export default function Home() {
                   </div>
                 </div>
                 <TabsContent value="week">
-      <Card x-chunk="dashboard-05-chunk-3">
-        <CardHeader className="px-7">
-          <CardTitle>Orders</CardTitle>
-          <CardDescription>
-            Recent orders from your store.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>request</TableHead>
-                <TableHead className="hidden sm:table-cell">ping</TableHead>
-                <TableHead className="hidden sm:table-cell">status</TableHead>
-                <TableHead className="hidden md:table-cell">time</TableHead>
-                <TableHead className="text-right">unused</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {pingHistory.map((entry, index) => (
-                <TableRow key={index} className={entry.status === "offline" ? "bg-accent" : ""}>
-                  <TableCell>
-                    <div className="font-medium">{websitename} N° {index + 1}</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      {websitetogetstatus}
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">{entry.ping}ms</TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
-                      {entry.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
-                  <TableCell className="text-right">$250.00</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </TabsContent>
+                  <Card x-chunk="dashboard-05-chunk-3">
+                    <CardHeader className="px-7">
+                      <CardTitle>ping history</CardTitle>
+                      <CardDescription>
+                        recent pings from this app
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>request</TableHead>
+                            <TableHead className="hidden sm:table-cell">ping</TableHead>
+                            <TableHead className="hidden sm:table-cell">status</TableHead>
+                            <TableHead className="hidden md:table-cell">time</TableHead>
+                            <TableHead className="text-right">incre / decre</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {pingHistory.map((entry, index) => (
+                            <TableRow key={index} className={entry.status === "offline" ? "bg-accent" : ""}>
+                              <TableCell>
+                                <div className="font-medium">{websitename}</div>
+                                <div className="hidden text-sm text-muted-foreground md:inline">
+                                  {websitetogetstatus}
+                                </div>
+                              </TableCell>
+                              <TableCell className="hidden sm:table-cell">{entry.ping}ms</TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
+                                  {entry.status}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
+                              <TableCell className="text-right">
+                                {index > 0 && pingChanges[index - 1] !== undefined ? (
+                                  <>
+                                    {pingChanges[index - 1] > 0 ? "+" : ""}
+                                    {pingChanges[index - 1].toFixed(2)}%
+                                  </>
+                                ) : null}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
               </Tabs>
             </div>
             <div> {/* order card */}
