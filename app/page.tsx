@@ -132,7 +132,7 @@ export default function Home() {
 
 
   let websitename = "localhost test website";
-  let websitetogetstatus = "https://google.com";
+  let websitetogetstatus = "http://localhost:1234";
 
   const thumblink = "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
@@ -403,9 +403,9 @@ export default function Home() {
               <Tabs defaultValue="week"> {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <TabsList className="shadow-sm">
-                    <TabsTrigger value="week">week</TabsTrigger>
-                    <TabsTrigger value="month">month</TabsTrigger>
-                    <TabsTrigger value="year">year</TabsTrigger>
+                    <TabsTrigger value="week">1</TabsTrigger>
+                    <TabsTrigger value="month">2</TabsTrigger>
+                    <TabsTrigger value="year">3</TabsTrigger>
                   </TabsList>
                   <div className="ml-auto flex items-center gap-2">
                     <DropdownMenu>
