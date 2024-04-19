@@ -34,8 +34,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "dev.pickingname.get",
+      "longDescription": "application that pings the server and see the status of the server",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -61,10 +61,12 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 1100,
         "resizable": true,
         "title": "get",
-        "width": 800
+        "width": 1500,
+        "minHeight": 260,
+        "minWidth": 380
       }
     ]
   }

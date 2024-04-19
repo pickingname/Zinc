@@ -1,7 +1,8 @@
 "use client";
 
+{/* imports */ }
 import Image from "next/image"
-import { Loader2 } from "lucide-react"
+import { Loader2, Tornado } from "lucide-react"
 
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -26,6 +27,9 @@ import {
   Users2,
   HomeIcon
 } from "lucide-react"
+
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -84,55 +88,107 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip"
 import { overrideGlobalXHR } from 'tauri-xhr'
-overrideGlobalXHR()
+overrideGlobalXHR() /* override the xhr to disable cors */
 import axios from 'axios';
 
-export default function Home() {
-  const [online, setOnline] = useState<boolean>(false);
-  const [ping, setPing] = useState<number>(0);
-  const [pingPercentage, setPingPercentage] = useState<number>(0);
-  const [fetching, setFetching] = useState<boolean>(true);
 
-  let websitetogetstatus = "https://ps.ac.th";
+let initialFirstOffline = false;
+let initialFirstOnline = true;
+
+export default function Home() {
+  let [online, setOnline] = useState<boolean>(false);
+  let [ping, setPing] = useState<number>(0);
+  let [pingPercentage, setPingPercentage] = useState<number>(0);
+  let [fetching, setFetching] = useState<boolean>(true);
+  let [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]);
+  let [attempts, setAttempts] = useState<number>(1);
+  let [pingChanges, setPingChanges] = useState<Array<number>>([]);
+  let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
+
+  let websitename = "test website";
+  let websitetogetstatus = "http://localhost:1234/";
   var pinglimit = "5000";
+  let averagepingvaluetogetRAW = 10;
+  let to_round = 1;
+
+  let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
-    const checkStatus = async () => {
-
+    let checkStatus = async () => {
       try {
-        const startTime = Date.now();
+        let startTime = Date.now();
         await axios.get(websitetogetstatus);
-        const endTime = Date.now();
+        let endTime = Date.now();
         setOnline(true);
-        const currentPing = endTime - startTime;
-        setPing(currentPing);
-        const percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
-        setPingPercentage(Number(percentage.toFixed(2)));
-        setFetching(false);
+        
+        if (initialFirstOnline) {
+          toast.success("website is online!!!");
+          initialFirstOffline = true;
+          initialFirstOnline = false;
+        }
 
-        console.info(ping)
+        let currentPing = endTime - startTime;
+        setPing(currentPing);
+        let percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
+        setPingPercentage(Number(percentage.toFixed(to_round)));
+
+        if (pingHistory.length > 0) {
+          let lastPing = pingHistory[0].ping;
+          let change = ((currentPing - lastPing) / lastPing) * 100;
+          setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]);
+        }
+
+        setPingHistory(prevHistory => [
+          { ping: currentPing, status: "online", date: new Date().toLocaleString() },
+          ...prevHistory.slice(0, 4)
+        ]);
+
+        setLastTenPingValues(prevValues => [currentPing, ...prevValues.slice(0, averagepingvaluetoget)]);
+        setFetching(false);
       } catch (error) {
+        setOnline(false);
+        if (initialFirstOffline) {
+          toast.error("website is offline!!!");
+          initialFirstOffline = false;
+          initialFirstOnline = true;
+        }
         setOnline(false);
         setPing(0);
         setPingPercentage(0);
         setFetching(false);
+
+        setPingHistory(prevHistory => [
+          { ping: 0, status: "offline", date: new Date().toLocaleString() },
+          ...prevHistory.slice(0, 4)
+        ]);
       }
     };
 
-    const interval = setInterval(() => {
-      checkStatus();
-    }, 1000); // Refresh every 1 seconds
+    let interval = setInterval(checkStatus, 1000);
 
-    // Clear interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
+  let averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
 
   return (
     <main>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+        /> 
       <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14"> {/* main div */}
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
             <Sheet>
               <SheetTrigger asChild>
                 <Button size="icon" variant="outline" className="sm:hidden">
@@ -240,9 +296,9 @@ export default function Home() {
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"> {/* main dashboard that contains the blocks and grids */}
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2"> {/* all of the blocks are contained here, except reciept card */}
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"> {/* top row cards (fetcher, ping, avgms) */}
                 <Card
                   className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
                 >
@@ -260,7 +316,7 @@ export default function Home() {
                         please wait while we make the first request
                       </Button>
                     ) : (
-                      <Button>
+                      <Button variant={online ? "default" : "destructive"}>
                         website is {online ? 'online' : 'offline'}
                       </Button>
                     )}
@@ -287,12 +343,12 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2">
                   <CardHeader className="pb-2">
-                    <CardDescription>This Month</CardDescription>
-                    <CardTitle className="text-4xl">$5,329</CardTitle>
+                    <CardDescription>avg ping in the last {averagepingvaluetogetRAW} requests</CardDescription> { /* uses the raw value */ }
+                    <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */ }
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      +10% from last month
+                    { /* unused subtext */ }
                     </div>
                   </CardContent>
                   <CardFooter>
@@ -300,7 +356,7 @@ export default function Home() {
                   </CardFooter>
                 </Card>
               </div>
-              <Tabs defaultValue="week">
+              <Tabs defaultValue="week"> {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <TabsList>
                     <TabsTrigger value="week">Week</TabsTrigger>
@@ -346,189 +402,48 @@ export default function Home() {
                 <TabsContent value="week">
                   <Card x-chunk="dashboard-05-chunk-3">
                     <CardHeader className="px-7">
-                      <CardTitle>Orders</CardTitle>
+                      <CardTitle>ping history</CardTitle>
                       <CardDescription>
-                        Recent orders from your store.
+                        recent pings from this app
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Customer</TableHead>
-                            <TableHead className="hidden sm:table-cell">
-                              Type
-                            </TableHead>
-                            <TableHead className="hidden sm:table-cell">
-                              Status
-                            </TableHead>
-                            <TableHead className="hidden md:table-cell">
-                              Date
-                            </TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead>request</TableHead>
+                            <TableHead className="hidden sm:table-cell">ping</TableHead>
+                            <TableHead className="hidden sm:table-cell">status</TableHead>
+                            <TableHead className="hidden md:table-cell">time</TableHead>
+                            <TableHead className="text-right">incre / decre</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow className="bg-accent">
-                            <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Olivia Smith</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                olivia@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Refund
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="outline">
-                                Declined
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-24
-                            </TableCell>
-                            <TableCell className="text-right">$150.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Noah Williams</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                noah@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Subscription
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-25
-                            </TableCell>
-                            <TableCell className="text-right">$350.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Emma Brown</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                emma@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-26
-                            </TableCell>
-                            <TableCell className="text-right">$450.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Olivia Smith</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                olivia@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Refund
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="outline">
-                                Declined
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-24
-                            </TableCell>
-                            <TableCell className="text-right">$150.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="font-medium">Emma Brown</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                emma@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-26
-                            </TableCell>
-                            <TableCell className="text-right">$450.00</TableCell>
-                          </TableRow>
+                          {pingHistory.map((entry, index) => (
+                            <TableRow key={index} className={entry.status === "offline" ? "bg-accent" : ""}>
+                              <TableCell>
+                                <div className="font-medium">{websitename}</div>
+                                <div className="hidden text-sm text-muted-foreground md:inline">
+                                  {websitetogetstatus}
+                                </div>
+                              </TableCell>
+                              <TableCell className="hidden sm:table-cell">{entry.ping}ms</TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
+                                  {entry.status}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
+                              <TableCell className="text-right">
+                                {index > 0 && pingChanges[index - 1] !== undefined ? (
+                                  <>
+                                    {pingChanges[index - 1] > 0 ? "+" : ""}
+                                    {pingChanges[index - 1].toFixed(to_round)}%
+                                  </>
+                                ) : null}
+                              </TableCell>
+                            </TableRow>
+                          ))}
                         </TableBody>
                       </Table>
                     </CardContent>
@@ -536,7 +451,7 @@ export default function Home() {
                 </TabsContent>
               </Tabs>
             </div>
-            <div>
+            <div> {/* order card */}
               <Card
                 className="overflow-hidden" x-chunk="dashboard-05-chunk-4"
               >
