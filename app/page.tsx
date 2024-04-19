@@ -28,6 +28,9 @@ import {
   HomeIcon
 } from "lucide-react"
 
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Badge } from "@/components/ui/badge"
 import {
   Breadcrumb,
@@ -138,6 +141,7 @@ export default function Home() {
 
         setFetching(false);
       } catch (error) {
+        toast.warn("website is down!!!");
         setOnline(false);
         setPing(0);
         setPingPercentage(0);
@@ -161,6 +165,19 @@ export default function Home() {
 
   return (
     <main>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+        /> 
       <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14"> {/* main div */}
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
