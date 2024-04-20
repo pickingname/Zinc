@@ -447,7 +447,7 @@ export default function Home() {
                     <CardDescription>average ping</CardDescription>{" "}
                     {/* uses the raw value */}
                     <CardTitle className="text-4xl">
-                      {averagePing.toFixed(0)}ms
+                      {isNaN(averagePing) ? "0" : averagePing.toFixed(0)}ms
                     </CardTitle>{" "}
                     {/* no dots */}
                   </CardHeader>
@@ -624,7 +624,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
-                    <div className="font-semibold">website details</div>
+                    <div className="font-semiboldf">website details</div>
                     <ul className="grid gap-3">
                       {/*<li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
