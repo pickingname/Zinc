@@ -464,7 +464,7 @@ export default function Home() {
               <Tabs defaultValue="week">
                 {" "}
                 {/* tabs that contain the lists */}
-                <div className="flex items-center">
+                {/* <div className="flex items-center">
                   <TabsList className="shadow-sm">
                     <TabsTrigger value="week">1</TabsTrigger>
                     <TabsTrigger value="month">2</TabsTrigger>
@@ -501,7 +501,7 @@ export default function Home() {
                       <span className="sr-only sm:not-sr-only">export</span>
                     </Button>
                   </div>
-                </div>
+                </div> */}
                 <TabsContent value="week">
                   <Card x-chunk="dashboard-05-chunk-3" className="shadow-lg">
                     <CardHeader className="px-7">
