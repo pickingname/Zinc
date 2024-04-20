@@ -144,7 +144,7 @@ export default function Home() {
   };
 
   let websitename = "localhost test website";
-  let websitetogetstatus = "http://google.com";
+  let websitetogetstatus = "http://ps.ac.th";
 
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
@@ -644,9 +644,9 @@ export default function Home() {
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
-                          status text
+                          ping
                         </span>
-                        <span>{statustext}</span>
+                        <span>{ping}ms</span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">protocol</span>
