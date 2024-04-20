@@ -333,13 +333,13 @@ export default function Home() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="https://github.com/pickingname/get">dash</Link>
+                    <BreadcrumbPage>dash</BreadcrumbPage>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={websitetogetstatus}>{websitename}</Link>
+                    <BreadcrumbPage>{websitename}</BreadcrumbPage>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -518,9 +518,9 @@ export default function Home() {
                             <TableHead className="hidden sm:table-cell">
                               ping
                             </TableHead>
-                            <TableHead className="hidden sm:table-cell">
+                            {/* <TableHead className="hidden sm:table-cell">
                               incre / decre
-                            </TableHead>
+                            </TableHead> */}
                             <TableHead className="hidden md:table-cell">
                               time
                             </TableHead>
@@ -544,7 +544,7 @@ export default function Home() {
                               <TableCell className="hidden sm:table-cell">
                                 {entry.ping}ms
                               </TableCell>
-                              <TableCell className="hidden sm:table-cell"></TableCell>
+                              { /* <TableCell className="hidden sm:table-cell"></TableCell> */ }
                               <TableCell className="hidden md:table-cell">
                                 {entry.date}
                               </TableCell>
