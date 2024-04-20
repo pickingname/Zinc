@@ -1,12 +1,14 @@
 "use client";
 
-{/* imports */ }
-import { ModeToggle } from '@/components/ui/themechanger'
-import Image from "next/image"
-import { Loader2, Tornado } from "lucide-react"
-import { Skeleton } from "@/components/ui/skeleton"
-import { useState } from 'react';
-import { useEffect } from 'react';
+{
+  /* imports */
+}
+import { ModeToggle } from "@/components/ui/themechanger";
+import Image from "next/image";
+import { Loader2, Tornado } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
+import { useEffect } from "react";
 
 import {
   AlertDialog,
@@ -18,9 +20,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Gauge } from 'lucide-react';
-import Link from "next/link"
+} from "@/components/ui/alert-dialog";
+import { Gauge } from "lucide-react";
+import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
@@ -38,13 +40,13 @@ import {
   ShoppingCart,
   Truck,
   Users2,
-  HomeIcon
-} from "lucide-react"
+  HomeIcon,
+} from "lucide-react";
 
-import { Bounce, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -52,8 +54,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -61,7 +63,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -70,16 +72,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@/components/ui/pagination"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+} from "@/components/ui/pagination";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -87,42 +89,39 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   TooltipProvider,
-} from "@/components/ui/tooltip"
-import { overrideGlobalXHR } from 'tauri-xhr'
-import axios from 'axios';
-
+} from "@/components/ui/tooltip";
+import { overrideGlobalXHR } from "tauri-xhr";
+import axios from "axios";
 
 let initialFirstOffline = false;
 let initialFirstOnline = true;
-const appstarttime = new Date().toLocaleString() + ''
-
+const appstarttime = new Date().toLocaleString() + "";
 
 export default function Home() {
   let [online, setOnline] = useState<boolean>(false);
   let [ping, setPing] = useState<number>(0);
   let [pingPercentage, setPingPercentage] = useState<number>(0);
   let [statuscode, setstatuscode] = useState<number>(0);
-  const [statustext, setstatustext] = useState<string>('unknown');
+  const [statustext, setstatustext] = useState<string>("unknown");
   let [fetching, setFetching] = useState<boolean>(true);
-  let [pingHistory, setPingHistory] = useState<Array<{ ping: number; status: string; date: string }>>([]);
+  let [pingHistory, setPingHistory] = useState<
+    Array<{ ping: number; status: string; date: string }>
+  >([]);
   let [attempts, setAttempts] = useState<number>(1);
   let [pingChanges, setPingChanges] = useState<Array<number>>([]);
   let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
-  const [webtype, setWebtype] = useState<string>('unknown');
+  const [webtype, setWebtype] = useState<string>("unknown");
   let [totalRequests, setTotalRequests] = useState<number>(0);
   const [ip, setIP] = useState("");
+  let [totalonline, settotalonline] = useState<number>(0);
+  let [totaloffline, settotaloffline] = useState<number>(0);
 
   const getData = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
@@ -130,11 +129,11 @@ export default function Home() {
     setIP(res.data.ip);
   };
 
-
   let websitename = "localhost test website";
   let websitetogetstatus = "http://localhost:1234";
 
-  const thumblink = "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
+  const thumblink =
+    "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   var pinglimit = "1000";
   let averagepingvaluetogetRAW = 10;
@@ -144,20 +143,20 @@ export default function Home() {
 
   useEffect(() => {
     getData();
-    overrideGlobalXHR() /* override the xhr to disable cors */
-    let webtype = 'not yet acquired';
+    overrideGlobalXHR(); /* override the xhr to disable cors */
+    let webtype = "not yet acquired";
 
     if (websitetogetstatus.startsWith("http://")) {
-      setWebtype("http")
+      setWebtype("http");
     } else if (websitetogetstatus.startsWith("https://")) {
-      setWebtype("https")
+      setWebtype("https");
     } else {
-      setWebtype("unknown")
+      setWebtype("unknown");
     }
 
     let checkStatus = async () => {
       try {
-        setTotalRequests(prevTotal => prevTotal + 1);
+        setTotalRequests((prevTotal) => prevTotal + 1);
         let startTime = Date.now();
         let res = await axios.get(websitetogetstatus);
         setstatuscode(res.status);
@@ -165,6 +164,7 @@ export default function Home() {
 
         let endTime = Date.now();
         setOnline(true);
+        settotalonline((prevTotal) => prevTotal + 1);
 
         if (initialFirstOnline) {
           toast.success("website is online");
@@ -177,31 +177,42 @@ export default function Home() {
 
         let currentPing = endTime - startTime;
         setPing(currentPing);
-        let percentage = Math.min((currentPing / parseInt(pinglimit)) * 100, 100);
+        let percentage = Math.min(
+          (currentPing / parseInt(pinglimit)) * 100,
+          100
+        );
         setPingPercentage(Number(percentage.toFixed(to_round)));
 
         if (pingHistory.length > 0) {
           let lastPing = pingHistory[0].ping;
           let change = ((currentPing - lastPing) / lastPing) * 100;
-          setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]);
+          setPingChanges((prevChanges) => [change, ...prevChanges.slice(0, 4)]);
         }
 
-        setPingHistory(prevHistory => [
-          { ping: currentPing, status: "online", date: new Date().toLocaleString() },
-          ...prevHistory.slice(0, 4)
+        setPingHistory((prevHistory) => [
+          {
+            ping: currentPing,
+            status: "online",
+            date: new Date().toLocaleString(),
+          },
+          ...prevHistory.slice(0, 4),
         ]);
 
-        setLastTenPingValues(prevValues => [currentPing, ...prevValues.slice(0, averagepingvaluetoget)]);
+        setLastTenPingValues((prevValues) => [
+          currentPing,
+          ...prevValues.slice(0, averagepingvaluetoget),
+        ]);
         setFetching(false);
       } catch (error) {
+        settotaloffline((prevTotal) => prevTotal + 1);
         setOnline(false);
         setstatuscode(408);
-        setstatustext('server cannot be reached');
+        setstatustext("server cannot be reached");
         if (initialFirstOffline) {
           toast.error("website is offline");
-                    new Audio(
-                      "https://pickingname.github.io/datastores/get/sounds/no.mp3"
-                    ).play();
+          new Audio(
+            "https://pickingname.github.io/datastores/get/sounds/no.mp3"
+          ).play();
           initialFirstOffline = false;
           initialFirstOnline = true;
         }
@@ -210,9 +221,9 @@ export default function Home() {
         setPingPercentage(0);
         setFetching(false);
 
-        setPingHistory(prevHistory => [
+        setPingHistory((prevHistory) => [
           { ping: 0, status: "offline", date: new Date().toLocaleString() },
-          ...prevHistory.slice(0, 4)
+          ...prevHistory.slice(0, 4),
         ]);
       }
     };
@@ -222,7 +233,9 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  let averagePing = lastTenPingValues.reduce((acc, curr) => acc + curr, 0) / lastTenPingValues.length;
+  let averagePing =
+    lastTenPingValues.reduce((acc, curr) => acc + curr, 0) /
+    lastTenPingValues.length;
 
   return (
     <main className="font-outfit">
@@ -239,9 +252,15 @@ export default function Home() {
         theme="dark"
         transition={Bounce}
       />
-      <div className="flex min-h-screen w-full flex-col bg-muted/40"> {/* main */}
-        <div className="flex flex-col sm:gap-4 sm:py-4"> {/* main div */}
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"> {/* header that contains the breadcrumbs, search, and user profile */}
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        {" "}
+        {/* main */}
+        <div className="flex flex-col sm:gap-4 sm:py-4">
+          {" "}
+          {/* main div */}
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+            {" "}
+            {/* header that contains the breadcrumbs, search, and user profile */}
             {/* <Sheet>
               <SheetTrigger asChild>
                 <Button size="icon" variant="outline" className="sm:hidden">
@@ -330,9 +349,13 @@ export default function Home() {
                   size="icon"
                   className="overflow-hidden rounded-full"
                 >
-                  <div className={online ? " w-full h-full bg-green-500 animate-pulse motion-safe:animate-none" : " w-full h-full bg-red-500 animate-pulse motion-safe:animate-none"}>
-
-                  </div>
+                  <div
+                    className={
+                      online
+                        ? " w-full h-full bg-green-500 animate-pulse motion-safe:animate-none"
+                        : " w-full h-full bg-red-500 animate-pulse motion-safe:animate-none"
+                    }
+                  ></div>
                 </Button>
               </DropdownMenuTrigger>
               {/* <DropdownMenuContent align="end">
@@ -345,11 +368,18 @@ export default function Home() {
               </DropdownMenuContent> */}
             </DropdownMenu>
           </header>
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"> {/* main dashboard that contains the blocks and grids */}
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2"> {/* all of the blocks are contained here, except reciept card */}
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"> {/* top row cards (fetcher, ping, avgms) */}
+          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+            {" "}
+            {/* main dashboard that contains the blocks and grids */}
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+              {" "}
+              {/* all of the blocks are contained here, except reciept card */}
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                {" "}
+                {/* top row cards (fetcher, ping, avgms) */}
                 <Card
-                  className="sm:col-span-2 shadow-lg" x-chunk="dashboard-05-chunk-0"
+                  className="sm:col-span-2 shadow-lg"
+                  x-chunk="dashboard-05-chunk-0"
                 >
                   <CardHeader className="pb-3">
                     <CardTitle>fetcher</CardTitle>
@@ -365,18 +395,23 @@ export default function Home() {
                         please wait while we make the first request
                       </Button>
                     ) : (
-                      <Button variant={online ? "default" : "destructive"} className="shadow-lg">
-                        website is {online ? 'online' : 'offline'}
+                      <Button
+                        variant={online ? "default" : "destructive"}
+                        className="shadow-lg"
+                      >
+                        website is {online ? "online" : "offline"}
                       </Button>
                     )}
                   </CardFooter>
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-1" className="shadow-lg">
                   {!fetching && (
-
                     <div>
                       <CardHeader className="pb-2">
-                        <CardDescription> {online ? 'online' : 'offline'}</CardDescription>
+                        <CardDescription>
+                          {" "}
+                          {online ? "online" : "offline"}
+                        </CardDescription>
                         <CardTitle className="text-4xl">{ping}ms </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -385,15 +420,22 @@ export default function Home() {
                         </div>
                       </CardContent>
                       <CardFooter>
-                        <Progress value={pingPercentage} aria-label="25% increase" />
+                        <Progress
+                          value={pingPercentage}
+                          aria-label="25% increase"
+                        />
                       </CardFooter>
                     </div>
                   )}
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2" className="shadow-lg">
                   <CardHeader className="pb-2">
-                    <CardDescription>average ping</CardDescription> { /* uses the raw value */}
-                    <CardTitle className="text-4xl">{averagePing.toFixed(0)}ms</CardTitle> { /* no dots */}
+                    <CardDescription>average ping</CardDescription>{" "}
+                    {/* uses the raw value */}
+                    <CardTitle className="text-4xl">
+                      {averagePing.toFixed(0)}ms
+                    </CardTitle>{" "}
+                    {/* no dots */}
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
@@ -402,11 +444,12 @@ export default function Home() {
                   </CardContent>
                   <CardFooter>
                     {/* <Progress value={12} aria-label="12% increase" /> */}
-
                   </CardFooter>
                 </Card>
               </div>
-              <Tabs defaultValue="week"> {/* tabs that contain the lists */}
+              <Tabs defaultValue="week">
+                {" "}
+                {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <TabsList className="shadow-sm">
                     <TabsTrigger value="week">1</TabsTrigger>
@@ -431,12 +474,8 @@ export default function Home() {
                         <DropdownMenuCheckboxItem checked>
                           fullfilled
                         </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          dec
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          ref
-                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>dec</DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>ref</DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <Button
@@ -462,28 +501,48 @@ export default function Home() {
                         <TableHeader>
                           <TableRow>
                             <TableHead>request</TableHead>
-                            <TableHead className="hidden sm:table-cell">ping</TableHead>
-                            <TableHead className="hidden sm:table-cell">incre / decre</TableHead>
-                            <TableHead className="hidden md:table-cell">time</TableHead>
+                            <TableHead className="hidden sm:table-cell">
+                              ping
+                            </TableHead>
+                            <TableHead className="hidden sm:table-cell">
+                              incre / decre
+                            </TableHead>
+                            <TableHead className="hidden md:table-cell">
+                              time
+                            </TableHead>
                             <TableHead className="text-right">status</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {pingHistory.map((entry, index) => (
-                            <TableRow key={index} className={entry.status === "offline" ? "bg-accent" : ""}>
+                            <TableRow
+                              key={index}
+                              className={
+                                entry.status === "offline" ? "bg-accent" : ""
+                              }
+                            >
                               <TableCell>
                                 <div className="font-medium">{websitename}</div>
                                 <div className="hidden text-sm text-muted-foreground md:inline">
                                   {websitetogetstatus}
                                 </div>
                               </TableCell>
-                              <TableCell className="hidden sm:table-cell">{entry.ping}ms</TableCell>
                               <TableCell className="hidden sm:table-cell">
-
+                                {entry.ping}ms
                               </TableCell>
-                              <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
+                              <TableCell className="hidden sm:table-cell"></TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {entry.date}
+                              </TableCell>
                               <TableCell className="text-right">
-                                <Badge className="text-xs" variant={entry.status === "offline" ? "destructive" : "outline"}>
+                                <Badge
+                                  className="text-xs"
+                                  variant={
+                                    entry.status === "offline"
+                                      ? "destructive"
+                                      : "outline"
+                                  }
+                                >
                                   {entry.status}
                                 </Badge>
                               </TableCell>
@@ -496,9 +555,12 @@ export default function Home() {
                 </TabsContent>
               </Tabs>
             </div>
-            <div> {/* order card */}
+            <div>
+              {" "}
+              {/* order card */}
               <Card
-                className="overflow-hidden shadow-lg" x-chunk="dashboard-05-chunk-4"
+                className="overflow-hidden shadow-lg"
+                x-chunk="dashboard-05-chunk-4"
               >
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
@@ -516,7 +578,7 @@ export default function Home() {
                     <CardDescription>{websitetogetstatus}</CardDescription>
                   </div>
                   <div className="ml-auto flex items-center gap-1">
-                    { /* <Button size="sm" variant="outline" className="h-8 gap-1">
+                    {/* <Button size="sm" variant="outline" className="h-8 gap-1">
                       <Truck className="h-3.5 w-3.5" />
                       <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
                         Track Order
@@ -557,10 +619,8 @@ export default function Home() {
                         <span>$250.00</span>
                       </li>*/}
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          status
-                        </span>
-                        <span>{online ? 'online' : 'offline'}</span>
+                        <span className="text-muted-foreground">status</span>
+                        <span>{online ? "online" : "offline"}</span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
@@ -575,9 +635,7 @@ export default function Home() {
                         <span>{statustext}</span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          protocol
-                        </span>
+                        <span className="text-muted-foreground">protocol</span>
                         <span>{webtype}</span>
                       </li>
                     </ul>
@@ -606,13 +664,13 @@ export default function Home() {
                     <div className="grid gap-3">
                       <div className="font-semibold">uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        insert total uptime here
+                        {totalonline} seconds
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
                       <div className="font-semibold">downtime</div>
                       <div className="text-muted-foreground">
-                        insert total downtime here
+                        {totaloffline} seconds
                       </div>
                     </div>
                   </div>
@@ -625,7 +683,9 @@ export default function Home() {
                         <dd suppressHydrationWarning>{appstarttime}</dd>
                       </div>
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">total requests</dt>
+                        <dt className="text-muted-foreground">
+                          total requests
+                        </dt>
                         <dd>
                           <a>{totalRequests}</a>
                         </dd>
@@ -641,9 +701,15 @@ export default function Home() {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle><span className="font-outfit">current device ip</span></AlertDialogTitle>
+                                <AlertDialogTitle>
+                                  <span className="font-outfit">
+                                    current device ip
+                                  </span>
+                                </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  <span className="font-mono text-4xl">{ip}</span>
+                                  <span className="font-mono text-4xl">
+                                    {ip}
+                                  </span>
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -661,7 +727,15 @@ export default function Home() {
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="flex items-center gap-1 text-muted-foreground">
-                          <p><a href="https://github.com/pickingname/get" className="text-blue-400 underline underline-offset-2">get.app</a> v1.0.0-pre-1 revision n°4</p>
+                          <p>
+                            <a
+                              href="https://github.com/pickingname/get"
+                              className="text-blue-400 underline underline-offset-2"
+                            >
+                              get.app
+                            </a>{" "}
+                            v1.0.0-pre-1 revision n°4
+                          </p>
                         </dt>
                       </div>
                     </dl>
