@@ -678,13 +678,13 @@ export default function Home() {
                     <div className="grid gap-3">
                       <div className="font-semibold">uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        {secstotime(totalonline)}
+                        {totalonline ? secstotime(totalonline) : "0 seconds"}
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
                       <div className="font-semibold">downtime</div>
                       <div className="text-muted-foreground">
-                        {secstotime(totaloffline)}
+                        {totaloffline ? secstotime(totaloffline) : "0 seconds"}
                       </div>
                     </div>
                   </div>
