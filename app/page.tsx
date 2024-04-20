@@ -624,7 +624,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
-                    <div className="font-semiboldf">website details</div>
+                    <div className="font-semibold">website details</div>
                     <ul className="grid gap-3">
                       {/*<li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
