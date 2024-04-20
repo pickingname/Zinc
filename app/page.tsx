@@ -144,7 +144,7 @@ export default function Home() {
   };
 
   let websitename = "localhost test website";
-  let websitetogetstatus = "http://localhost:1234";
+  let websitetogetstatus = "http://google.com";
 
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
@@ -634,7 +634,7 @@ export default function Home() {
                       </li>*/}
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">status</span>
-                        <span>{online ? "online" : "offline"}</span>
+                        <span className={online ? "text-green-600" : "text-red-00"}>{online ? "online" : "offline"}</span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
