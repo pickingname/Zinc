@@ -123,6 +123,20 @@ export default function Home() {
   let [totalonline, settotalonline] = useState<number>(0);
   let [totaloffline, settotaloffline] = useState<number>(0);
 
+  function secstotime(seconds: number) {
+    seconds = Number(seconds);
+    var d = Math.floor(seconds / (3600*24));
+    var h = Math.floor(seconds % (3600*24) / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
+    var s = Math.floor(seconds % 60);
+    
+    var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return dDisplay + hDisplay + mDisplay + sDisplay;
+  }
+
   const getData = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
     console.log(res.data);
@@ -664,13 +678,13 @@ export default function Home() {
                     <div className="grid gap-3">
                       <div className="font-semibold">uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        {totalonline} seconds
+                        {secstotime(totalonline)}
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
                       <div className="font-semibold">downtime</div>
                       <div className="text-muted-foreground">
-                        {totaloffline} seconds
+                        {secstotime(totaloffline)}
                       </div>
                     </div>
                   </div>
