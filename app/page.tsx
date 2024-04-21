@@ -103,6 +103,8 @@ import {
 import { overrideGlobalXHR } from "tauri-xhr";
 import axios from "axios";
 
+import { appWindow } from '@tauri-apps/api/window';
+
 let initialFirstOffline = false;
 let initialFirstOnline = true;
 const appstarttime = new Date().toLocaleString() + "";
@@ -134,6 +136,8 @@ const Home: React.FC = () => {
     setwebsitename(inputtedwebsitename);
     setwebsiteurl(inputtedwebsiteurl);
   }, [inputtedwebsitename, inputtedwebsiteurl]);
+
+
 
   useEffect(() => {
     setwebsitename(websitename);
@@ -272,6 +276,7 @@ const Home: React.FC = () => {
 
   return (
     <main className="font-outfit">
+      {/* titlebar */}
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
@@ -285,7 +290,26 @@ const Home: React.FC = () => {
         theme="dark"
         transition={Bounce}
       />
-      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <div data-tauri-drag-region className="titlebar bg-muted/50">
+        <div className="titlebar-button hover:bg-muted" onClick={() => {appWindow.minimize();}}>
+          <img
+            src="https://api.iconify.design/mdi:window-minimize.svg"
+            alt="minimize"
+          />
+        </div>
+        <div className="titlebar-button hover:bg-muted" onClick={() => {appWindow.toggleMaximize();}}>
+          <img
+            src="https://api.iconify.design/mdi:window-maximize.svg"
+            alt="maximize"
+          />
+        </div>
+        <div className="titlebar-button hover:bg-muted" onClick={() => {appWindow.close();}}>
+          <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
+        </div>
+      </div>
+      <div className="flex min-h-screen w-full flex-col bg-muted/40 mt-8">
+      {" "}
+      {/* main */}
         {" "}
         {/* main */}
         <div className="flex flex-col sm:gap-4 sm:py-4">
