@@ -143,7 +143,7 @@ export default function Home() {
     setIP(res.data.ip);
   };
 
-  let websitename = "localhost test website";
+  let websitename = "website name should be here";
   let websitetogetstatus = "http://ps.ac.th";
 
   const thumblink =
@@ -171,12 +171,18 @@ export default function Home() {
     let checkStatus = async () => {
       try {
         setTotalRequests((prevTotal) => prevTotal + 1);
+
+        // code isolation because its important ping metrics
+
         let startTime = Date.now();
+
         let res = await axios.get(websitetogetstatus);
-        setstatuscode(res.status);
-        setstatustext(res.statusText);
 
         let endTime = Date.now();
+
+
+        setstatuscode(res.status);
+        setstatustext(res.statusText);
         setOnline(true);
         settotalonline((prevTotal) => prevTotal + 1);
 
