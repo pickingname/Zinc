@@ -172,7 +172,7 @@ export default function Home() {
       try {
         setTotalRequests((prevTotal) => prevTotal + 1);
 
-        // code isolation because its important ping metrics
+        // code isolation because its important ping metrics TEST
 
         let startTime = Date.now();
 
