@@ -32,18 +32,21 @@ const Home: React.FC = () => {
 
   const handleSave = () => {
     if (!serverName || !serverAddress) {
-      toast.error("Please fill in both server name and server address.");
+      toast.error("please fill in both server name and server address.");
       return;
     }
 
-    if (!serverAddress.startsWith("http://") && !serverAddress.startsWith("https://")) {
-      toast.error("Server address must start with http:// or https://");
+    if (
+      !serverAddress.startsWith("http://") &&
+      !serverAddress.startsWith("https://")
+    ) {
+      toast.error("server address must start with http:// or https://");
       return;
     }
 
     localStorage.setItem("name", serverName);
     localStorage.setItem("url", serverAddress);
-    toast.success(`server details saved successfully.`);
+    toast.success(`saved! redirecting to main page.`);
     window.location.href = "/main";
   };
 
@@ -63,46 +66,49 @@ const Home: React.FC = () => {
         transition={Bounce}
       />
       <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">get started</CardTitle>
-          <CardDescription>
-            <span className="text-sm text-red-400 text-balance">
-              Please include the protocol (http/https) and the port number if
-              needed.
-            </span>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="serverName">Server name</Label>
-            <Input
-              id="serverName"
-              type="text"
-              placeholder="my server"
-              value={serverName}
-              onChange={(e) => setServerName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="serverAddress">Server address</Label>
-            <Input
-              id="serverAddress"
-              type="text"
-              placeholder="https://example.com"
-              value={serverAddress}
-              onChange={(e) => setServerAddress(e.target.value)}
-              required
-            />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" onClick={handleSave}>
-            Save
-          </Button>
-        </CardFooter>
-      </Card>
+        
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle className="text-2xl">get started</CardTitle>
+            <CardDescription>
+              <span className="text-sm text-red-400 text-balance">
+                please include the protocol (http/https) and the port number if
+                needed.
+              </span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="serverName">server name</Label>
+              <Input
+                autoComplete="off"
+                id="serverName"
+                type="text"
+                placeholder="my server"
+                value={serverName}
+                onChange={(e) => setServerName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="serverAddress">server address</Label>
+              <Input
+                autoComplete="off"
+                id="serverAddress"
+                type="text"
+                placeholder="https://example.com"
+                value={serverAddress}
+                onChange={(e) => setServerAddress(e.target.value)}
+                required
+              />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" onClick={handleSave}>
+              save
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </main>
   );

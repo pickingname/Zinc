@@ -5,7 +5,7 @@
 }
 import { ModeToggle } from "@/components/ui/themechanger";
 import Image from "next/image";
-import { Loader2, Tornado } from "lucide-react";
+import { Loader2, Pen, SquarePen } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -122,14 +122,30 @@ export default function Home() {
   const [ip, setIP] = useState("");
   let [totalonline, settotalonline] = useState<number>(0);
   let [totaloffline, settotaloffline] = useState<number>(0);
+  const [wasdurl, setWasdurl] = useState("");
+  const [wasdname, setWasdname] = useState("");
+
+  useEffect(() => {
+    // Perform localStorage action
+    const url = localStorage.getItem("url");
+    const name = localStorage.getItem("name");
+
+    if (url) {
+      setWasdurl(url);
+    }
+
+    if (name) {
+      setWasdname(name);
+    }
+  }, []);
 
   function secstotime(seconds: number) {
     seconds = Number(seconds);
-    var d = Math.floor(seconds / (3600*24));
-    var h = Math.floor(seconds % (3600*24) / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
+    var d = Math.floor(seconds / (3600 * 24));
+    var h = Math.floor((seconds % (3600 * 24)) / 3600);
+    var m = Math.floor((seconds % 3600) / 60);
     var s = Math.floor(seconds % 60);
-    
+
     var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
@@ -143,26 +159,34 @@ export default function Home() {
     setIP(res.data.ip);
   };
 
-  let websitename = localStorage.getItem("websitename");
-  let websitetogetstatus = localStorage.getItem("websiteurl");
+  let websitename = wasdname;
+  let websitetogetstatus = wasdurl;
 
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
-  var pinglimit = "1000";
+  var pinglimit = "2000";
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
+    websitename = wasdname;
+    websitetogetstatus = wasdurl;
     getData();
     overrideGlobalXHR(); /* override the xhr to disable cors */
     let webtype = "not yet acquired";
 
-    if (websitetogetstatus && websitetogetstatus.startsWith("http://")) {
+    if (
+      localStorage.getItem("url") &&
+      localStorage.getItem("url")?.startsWith("http://")
+    ) {
       setWebtype("http");
-    } else if (websitetogetstatus && websitetogetstatus.startsWith("https://")) {
+    } else if (
+      localStorage.getItem("url") &&
+      localStorage.getItem("url")?.startsWith("https://")
+    ) {
       setWebtype("https");
     } else {
       setWebtype("unknown");
@@ -176,10 +200,9 @@ export default function Home() {
 
         let startTime = Date.now();
 
-        let res = await axios.get(websitetogetstatus);
+        let res = await axios.get(localStorage.getItem("url") ?? ""); // null check
 
         let endTime = Date.now();
-
 
         setstatuscode(res.status);
         setstatustext(res.statusText);
@@ -470,14 +493,14 @@ export default function Home() {
               <Tabs defaultValue="week">
                 {" "}
                 {/* tabs that contain the lists */}
-                {/* <div className="flex items-center">
-                  <TabsList className="shadow-sm">
+                <div className="flex items-center">
+                  {/* <TabsList className="shadow-sm">
                     <TabsTrigger value="week">1</TabsTrigger>
                     <TabsTrigger value="month">2</TabsTrigger>
                     <TabsTrigger value="year">3</TabsTrigger>
-                  </TabsList>
+                  </TabsList> */}
                   <div className="ml-auto flex items-center gap-2">
-                    <DropdownMenu>
+                    {/* <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="outline"
@@ -497,17 +520,15 @@ export default function Home() {
                         <DropdownMenuCheckboxItem>dec</DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem>ref</DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
-                    </DropdownMenu>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 gap-1 text-sm shadow-sm"
-                    >
-                      <File className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">export</span>
+                    </DropdownMenu> */}
+                    <Button size="sm" variant="outline" className="h-8 gap-1">
+                      <SquarePen className="h-3.5 w-3.5" />
+                      <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                        <Link href="/">edit website</Link>
+                      </span>
                     </Button>
                   </div>
-                </div> */}
+                </div>
                 <TabsContent value="week">
                   <Card x-chunk="dashboard-05-chunk-3" className="shadow-lg">
                     <CardHeader className="px-7">
@@ -550,7 +571,7 @@ export default function Home() {
                               <TableCell className="hidden sm:table-cell">
                                 {entry.ping}ms
                               </TableCell>
-                              { /* <TableCell className="hidden sm:table-cell"></TableCell> */ }
+                              {/* <TableCell className="hidden sm:table-cell"></TableCell> */}
                               <TableCell className="hidden md:table-cell">
                                 {entry.date}
                               </TableCell>
@@ -640,7 +661,11 @@ export default function Home() {
                       </li>*/}
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">status</span>
-                        <span className={online ? "text-green-600" : "text-red-00"}>{online ? "online" : "offline"}</span>
+                        <span
+                          className={online ? "text-green-600" : "text-red-00"}
+                        >
+                          {online ? "online" : "offline"}
+                        </span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
@@ -649,9 +674,7 @@ export default function Home() {
                         <span>{statuscode}</span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          ping
-                        </span>
+                        <span className="text-muted-foreground">ping</span>
                         <span>{ping}ms</span>
                       </li>
                       <li className="flex items-center justify-between">
