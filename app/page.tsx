@@ -109,7 +109,7 @@ const appstarttime = new Date().toLocaleString() + "";
 
 const Home: React.FC = () => {
   const [websitename, setwebsitename] = useState<string>('example website');
-  const [websiteurl, setwebsiteurl] = useState<string>('https://google.com');
+  const [websiteurl, setwebsiteurl] = useState<string>('http://localhost:1234');
   const [inputtedwebsitename, setinputtedwebsitename] = useState<string>('');
   const [inputtedwebsiteurl, setinputtedwebsiteurl] = useState<string>('');
   const [online, setOnline] = useState<boolean>(false);
@@ -129,6 +129,7 @@ const Home: React.FC = () => {
   const [ip, setIP] = useState("");
   const [totalonline, settotalonline] = useState<number>(0);
   const [totaloffline, settotaloffline] = useState<number>(0);
+  let donotifyonhighpingusage = true;
 
   useEffect(() => {
     setwebsitename(inputtedwebsitename);
@@ -176,6 +177,7 @@ const Home: React.FC = () => {
 
         let currentPing = endTime - startTime;
         setPing(currentPing);
+
         let percentage = Math.min(
           (currentPing / parseInt(pinglimit)) * 100,
           100
@@ -207,6 +209,15 @@ const Home: React.FC = () => {
         setOnline(false);
         setstatuscode(408);
         setstatustext("server cannot be reached");
+
+        if (totaloffline > 5 ) {
+          if (donotifyonhighpingusage == true) {
+            toast.warning("offline for more than 3 minutes!!");
+            new Audio(
+              "https://pickingname.github.io/datastores/get/sounds/level_3.mp3"
+            ).play();
+          }
+        }
 
         if (initialFirstOffline) {
           toast.error("website is offline");
