@@ -107,71 +107,39 @@ let initialFirstOffline = false;
 let initialFirstOnline = true;
 const appstarttime = new Date().toLocaleString() + "";
 
-export default function Home() {
-  let [online, setOnline] = useState<boolean>(false);
-  let [ping, setPing] = useState<number>(0);
-  let [pingPercentage, setPingPercentage] = useState<number>(0);
-  let [statuscode, setstatuscode] = useState<number>(0);
+const Home: React.FC = () => {
+  const [websitename, setwebsitename] = useState<string>('example website');
+  const [websiteurl, setwebsiteurl] = useState<string>('https://google.com');
+  const [inputtedwebsitename, setinputtedwebsitename] = useState<string>('');
+  const [inputtedwebsiteurl, setinputtedwebsiteurl] = useState<string>('');
+  const [online, setOnline] = useState<boolean>(false);
+  const [ping, setPing] = useState<number>(0);
+  const [pingPercentage, setPingPercentage] = useState<number>(0);
+  const [statuscode, setstatuscode] = useState<number>(0);
   const [statustext, setstatustext] = useState<string>("unknown");
-  let [fetching, setFetching] = useState<boolean>(true);
-  let [pingHistory, setPingHistory] = useState<
+  const [fetching, setFetching] = useState<boolean>(true);
+  const [pingHistory, setPingHistory] = useState<
     Array<{ ping: number; status: string; date: string }>
   >([]);
-  let [attempts, setAttempts] = useState<number>(1);
-  let [pingChanges, setPingChanges] = useState<Array<number>>([]);
-  let [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
+  const [attempts, setAttempts] = useState<number>(1);
+  const [pingChanges, setPingChanges] = useState<Array<number>>([]);
+  const [lastTenPingValues, setLastTenPingValues] = useState<number[]>([]);
   const [webtype, setWebtype] = useState<string>("unknown");
-  let [totalRequests, setTotalRequests] = useState<number>(0);
+  const [totalRequests, setTotalRequests] = useState<number>(0);
   const [ip, setIP] = useState("");
-  let [totalonline, settotalonline] = useState<number>(0);
-  let [totaloffline, settotaloffline] = useState<number>(0);
-  let [websitename, setwebsitename] = useState<string>('example website');
-  let [websiteurl, setwebsiteurl] = useState<string>('https://google.com');
-  let [inputtedwebsitename, setinputtedwebsitename] = useState<string>('');
-  let [inputtedwebsiteurl, setinputtedwebsiteurl] = useState<string>('');
+  const [totalonline, settotalonline] = useState<number>(0);
+  const [totaloffline, settotaloffline] = useState<number>(0);
 
-  function updatetarget(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    e.preventDefault(); // Prevent default form submission behavior
-
-    // Update the website name and URL with the new values
+  useEffect(() => {
     setwebsitename(inputtedwebsitename);
     setwebsiteurl(inputtedwebsiteurl);
-  }
-
-  function secstotime(seconds: number) {
-    seconds = Number(seconds);
-    var d = Math.floor(seconds / (3600 * 24));
-    var h = Math.floor((seconds % (3600 * 24)) / 3600);
-    var m = Math.floor((seconds % 3600) / 60);
-    var s = Math.floor(seconds % 60);
-
-    var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    return dDisplay + hDisplay + mDisplay + sDisplay;
-  }
-
-  const getData = async () => {
-    const res = await axios.get("https://api.ipify.org/?format=json");
-    console.log(res.data);
-    setIP(res.data.ip);
-  };
-
-  const thumblink =
-    "https://www.google.com/s2/favicons?domain=" + websitename;
-
-  var pinglimit = "2000";
-  let averagepingvaluetogetRAW = 10;
-  let to_round = 1;
-
-  let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
+  }, [inputtedwebsitename, inputtedwebsiteurl]);
 
   useEffect(() => {
     setwebsitename(websitename);
     setwebsiteurl(websiteurl);
     getData();
-    overrideGlobalXHR(); /* override the xhr to disable cors */
+    overrideGlobalXHR();
     let webtype = "not yet acquired";
 
     if (websiteurl.startsWith("http://")) {
@@ -182,25 +150,20 @@ export default function Home() {
       setWebtype("unknown");
     }
 
-    let checkStatus = async () => {
+    const checkStatus = async () => {
       try {
-        
         setwebsitename(websitename);
         setwebsiteurl(websiteurl);
-        setTotalRequests((prevTotal) => prevTotal + 1);
-
-        // code isolation because its important ping metrics
+        setTotalRequests(prevTotal => prevTotal + 1);
 
         let startTime = Date.now();
-
         let res = await axios.get(websiteurl);
-
         let endTime = Date.now();
 
         setstatuscode(res.status);
         setstatustext(res.statusText);
         setOnline(true);
-        settotalonline((prevTotal) => prevTotal + 1);
+        settotalonline(prevTotal => prevTotal + 1);
 
         if (initialFirstOnline) {
           toast.success("website is online");
@@ -222,10 +185,10 @@ export default function Home() {
         if (pingHistory.length > 0) {
           let lastPing = pingHistory[0].ping;
           let change = ((currentPing - lastPing) / lastPing) * 100;
-          setPingChanges((prevChanges) => [change, ...prevChanges.slice(0, 4)]);
+          setPingChanges(prevChanges => [change, ...prevChanges.slice(0, 4)]);
         }
 
-        setPingHistory((prevHistory) => [
+        setPingHistory(prevHistory => [
           {
             ping: currentPing,
             status: "online",
@@ -234,16 +197,17 @@ export default function Home() {
           ...prevHistory.slice(0, 4),
         ]);
 
-        setLastTenPingValues((prevValues) => [
+        setLastTenPingValues(prevValues => [
           currentPing,
           ...prevValues.slice(0, averagepingvaluetoget),
         ]);
         setFetching(false);
       } catch (error) {
-        settotaloffline((prevTotal) => prevTotal + 1);
+        settotaloffline(prevTotal => prevTotal + 1);
         setOnline(false);
         setstatuscode(408);
         setstatustext("server cannot be reached");
+
         if (initialFirstOffline) {
           toast.error("website is offline");
           new Audio(
@@ -257,17 +221,50 @@ export default function Home() {
         setPingPercentage(0);
         setFetching(false);
 
-        setPingHistory((prevHistory) => [
+        setPingHistory(prevHistory => [
           { ping: 0, status: "offline", date: new Date().toLocaleString() },
           ...prevHistory.slice(0, 4),
         ]);
       }
     };
 
-    let interval = setInterval(checkStatus, 1000);
+    const interval = setInterval(checkStatus, 1000);
 
     return () => clearInterval(interval);
   }, []);
+
+  const getData = async () => {
+    const res = await axios.get("https://api.ipify.org/?format=json");
+    setIP(res.data.ip);
+  };
+
+  const updatetarget = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    setwebsitename(inputtedwebsitename);
+    setwebsiteurl(inputtedwebsiteurl);
+  };
+
+  const secstotime = (seconds: number) => {
+    seconds = Number(seconds);
+    var d = Math.floor(seconds / (3600 * 24));
+    var h = Math.floor((seconds % (3600 * 24)) / 3600);
+    var m = Math.floor((seconds % 3600) / 60);
+    var s = Math.floor(seconds % 60);
+
+    var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return dDisplay + hDisplay + mDisplay + sDisplay;
+  };
+
+  let averagepingvaluetogetRAW = 10;
+  let to_round = 1;
+  let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
+
+  let pinglimit = "2000";
+  const thumblink = "https://www.google.com/s2/favicons?domain=" + websitename;
 
   let averagePing =
     lastTenPingValues.reduce((acc, curr) => acc + curr, 0) /
@@ -853,3 +850,5 @@ export default function Home() {
     </main>
   );
 }
+
+export default Home;
