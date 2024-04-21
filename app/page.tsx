@@ -4,12 +4,23 @@
   /* imports */
 }
 import { ModeToggle } from "@/components/ui/themechanger";
+
 import Image from "next/image";
 import { Loader2, Tornado } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { useEffect } from "react";
-
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -55,15 +66,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -73,7 +76,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+
 import {
   Pagination,
   PaginationContent,
@@ -122,14 +125,23 @@ export default function Home() {
   const [ip, setIP] = useState("");
   let [totalonline, settotalonline] = useState<number>(0);
   let [totaloffline, settotaloffline] = useState<number>(0);
+  let [websitename, setwebsitename] = useState<string>('example website');
+  let [websiteurl, setwebsiteurl] = useState<string>('https://google.com');
+  let [inputtedwebsitename, setinputtedwebsitename] = useState<string>('');
+  let [inputtedwebsiteurl, setinputtedwebsiteurl] = useState<string>('');
+
+  function updatetarget(e : any) {
+    setwebsitename(inputtedwebsitename);
+    setwebsiteurl(inputtedwebsiteurl);
+  }
 
   function secstotime(seconds: number) {
     seconds = Number(seconds);
-    var d = Math.floor(seconds / (3600*24));
-    var h = Math.floor(seconds % (3600*24) / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
+    var d = Math.floor(seconds / (3600 * 24));
+    var h = Math.floor((seconds % (3600 * 24)) / 3600);
+    var m = Math.floor((seconds % 3600) / 60);
     var s = Math.floor(seconds % 60);
-    
+
     var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
@@ -143,11 +155,8 @@ export default function Home() {
     setIP(res.data.ip);
   };
 
-  let websitename = "website name should be here";
-  let websitetogetstatus = "http://ps.ac.th";
-
   const thumblink =
-    "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
+    "https://www.google.com/s2/favicons?domain=" + websitename;
 
   var pinglimit = "1000";
   let averagepingvaluetogetRAW = 10;
@@ -156,13 +165,15 @@ export default function Home() {
   let averagepingvaluetoget = averagepingvaluetogetRAW - 1;
 
   useEffect(() => {
+    setwebsitename(websitename);
+    setwebsiteurl(websiteurl);
     getData();
     overrideGlobalXHR(); /* override the xhr to disable cors */
     let webtype = "not yet acquired";
 
-    if (websitetogetstatus.startsWith("http://")) {
+    if (websiteurl.startsWith("http://")) {
       setWebtype("http");
-    } else if (websitetogetstatus.startsWith("https://")) {
+    } else if (websiteurl.startsWith("https://")) {
       setWebtype("https");
     } else {
       setWebtype("unknown");
@@ -170,16 +181,18 @@ export default function Home() {
 
     let checkStatus = async () => {
       try {
+        
+        setwebsitename(websitename);
+        setwebsiteurl(websiteurl);
         setTotalRequests((prevTotal) => prevTotal + 1);
 
         // code isolation because its important ping metrics
 
         let startTime = Date.now();
 
-        let res = await axios.get(websitetogetstatus);
+        let res = await axios.get(websiteurl);
 
         let endTime = Date.now();
-
 
         setstatuscode(res.status);
         setstatustext(res.statusText);
@@ -350,7 +363,7 @@ export default function Home() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{websitetogetstatus}</BreadcrumbPage>
+                  <BreadcrumbPage>{websiteurl}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -404,7 +417,7 @@ export default function Home() {
                   <CardHeader className="pb-3">
                     <CardTitle>fetcher</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
-                      currently getting data from {websitetogetstatus}
+                      currently getting data from {websiteurl}
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
@@ -544,13 +557,13 @@ export default function Home() {
                               <TableCell>
                                 <div className="font-medium">{websitename}</div>
                                 <div className="hidden text-sm text-muted-foreground md:inline">
-                                  {websitetogetstatus}
+                                  {websiteurl}
                                 </div>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">
                                 {entry.ping}ms
                               </TableCell>
-                              { /* <TableCell className="hidden sm:table-cell"></TableCell> */ }
+                              {/* <TableCell className="hidden sm:table-cell"></TableCell> */}
                               <TableCell className="hidden md:table-cell">
                                 {entry.date}
                               </TableCell>
@@ -592,10 +605,10 @@ export default function Home() {
                         className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
                       >
                         <Copy className="h-3 w-3" />
-                        <span className="sr-only">Copy Order ID</span>
+                        <span className="sr-only">change theme</span>
                       </Button>
                     </CardTitle>
-                    <CardDescription>{websitetogetstatus}</CardDescription>
+                    <CardDescription>{websiteurl}</CardDescription>
                   </div>
                   <div className="ml-auto flex items-center gap-1">
                     {/* <Button size="sm" variant="outline" className="h-8 gap-1">
@@ -640,7 +653,11 @@ export default function Home() {
                       </li>*/}
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">status</span>
-                        <span className={online ? "text-green-600" : "text-red-00"}>{online ? "online" : "offline"}</span>
+                        <span
+                          className={online ? "text-green-600" : "text-red-00"}
+                        >
+                          {online ? "online" : "offline"}
+                        </span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
@@ -649,9 +666,7 @@ export default function Home() {
                         <span>{statuscode}</span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          ping
-                        </span>
+                        <span className="text-muted-foreground">ping</span>
                         <span>{ping}ms</span>
                       </li>
                       <li className="flex items-center justify-between">
@@ -783,6 +798,51 @@ export default function Home() {
                   </Pagination>
                     </CardFooter>*/}
               </Card>
+              <div className="">
+                <Card className="mt-10 overflow-hidden shadow-lg rounded-lg border bg-card text-card-foreground">
+                  <CardHeader className="">
+                    <CardTitle className="text-2xl">config</CardTitle>
+                    <CardDescription>
+                      enter the details
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="websitename">website name</Label>
+                      <Input
+                        id="websitename"
+                        type="text"
+                        placeholder="my website"
+                        value={inputtedwebsitename}
+                        onChange={(e) => setinputtedwebsitename(e.target.value)}
+                        autoComplete="off"
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="websiteurl">website url</Label>
+                      <Input
+                        id="websiteurl"
+                        type="url"
+                        placeholder="https://google.com"
+                        value={inputtedwebsiteurl}
+                        onChange={(e) => setinputtedwebsiteurl(e.target.value)}
+                        autoComplete="off"
+                        required
+                      />
+                      <span className="text-sm pb-5">
+                        also include http:// or https:// in your website
+                        address
+                      </span>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full" onClick={updatetarget} >
+                      get status
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
             </div>
           </main>
         </div>
