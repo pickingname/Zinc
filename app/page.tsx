@@ -130,7 +130,10 @@ export default function Home() {
   let [inputtedwebsitename, setinputtedwebsitename] = useState<string>('');
   let [inputtedwebsiteurl, setinputtedwebsiteurl] = useState<string>('');
 
-  function updatetarget(e : any) {
+  function updatetarget(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Update the website name and URL with the new values
     setwebsitename(inputtedwebsitename);
     setwebsiteurl(inputtedwebsiteurl);
   }
@@ -158,7 +161,7 @@ export default function Home() {
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitename;
 
-  var pinglimit = "1000";
+  var pinglimit = "2000";
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
