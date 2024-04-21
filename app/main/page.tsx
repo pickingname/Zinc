@@ -777,7 +777,7 @@ export default function Home() {
                             >
                               get.app
                             </a>{" "}
-                            v1.0.0-pre-1 revision n°4
+                            v1.0.0 revision n°6
                           </p>
                         </dt>
                       </div>
