@@ -124,3 +124,5 @@ test_video.mp4
 # old cli directories
 /tooling/cli.js
 /tooling/cli.rs
+# Sentry Config File
+.sentryclirc
