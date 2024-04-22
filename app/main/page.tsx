@@ -166,9 +166,10 @@ export default function Home() {
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   let pinglimit: string | null = null;
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     pinglimit = window.localStorage.getItem("pinglimit");
   }
+
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
@@ -223,12 +224,11 @@ export default function Home() {
 
         let currentPing = endTime - startTime;
         setPing(currentPing); // Provide a default value of 0 if the retrieved value is null
-        let pingLimitNumber = Number(pinglimit); // Convert pinglimit to a number
-        let percentage = Math.min(
-          (currentPing / pingLimitNumber) * 100, // Perform arithmetic operation with pingLimitNumber
-          100
-        );
-        setPingPercentage(Number(percentage.toFixed(to_round)));
+        if (pinglimit) {
+          let pingLimitNumber = parseFloat(pinglimit);
+          let percentage = Math.min((currentPing / pingLimitNumber) * 100, 100);
+          setPingPercentage(Number(percentage.toFixed(to_round)));
+        }
 
         if (pingHistory.length > 0) {
           let lastPing = pingHistory[0].ping;
@@ -327,8 +327,7 @@ export default function Home() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-            <div className="relative ml-auto flex-1 md:grow-0">
-            </div>
+            <div className="relative ml-auto flex-1 md:grow-0"></div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -395,13 +394,14 @@ export default function Home() {
                       </CardHeader>
                       <CardContent>
                         <div className="text-xs text-muted-foreground">
-                          thats {pingPercentage}% of the limit ({pinglimit || 0}ms)
+                          that is {pingPercentage}% of the limit ({pinglimit || 0}
+                          ms)
                         </div>
                       </CardContent>
                       <CardFooter>
                         <Progress
                           value={pingPercentage}
-                          aria-label="25% increase"
+                          aria-label="ping percentage"
                         />
                       </CardFooter>
                     </div>
@@ -421,8 +421,7 @@ export default function Home() {
                       in the last {averagepingvaluetogetRAW} requests
                     </div>
                   </CardContent>
-                  <CardFooter>
-                  </CardFooter>
+                  <CardFooter></CardFooter>
                 </Card>
               </div>
               <Tabs defaultValue="week">
@@ -430,13 +429,13 @@ export default function Home() {
                 {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <div className="ml-auto flex items-center gap-2">
-                    <Link  href="/">
-                    <Button size="sm" variant="outline" className="h-8 gap-1">
-                      <SquarePen className="h-3.5 w-3.5" />
-                      <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                        <Link href="/">edit website</Link>
-                      </span>
-                    </Button>
+                    <Link href="/">
+                      <Button size="sm" variant="outline" className="h-8 gap-1">
+                        <SquarePen className="h-3.5 w-3.5" />
+                        <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                          <Link href="/">edit website</Link>
+                        </span>
+                      </Button>
                     </Link>
                   </div>
                 </div>
