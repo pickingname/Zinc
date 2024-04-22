@@ -308,60 +308,6 @@ export default function Home() {
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             {" "}
             {/* header that contains the breadcrumbs, search, and user profile */}
-            {/* <Sheet>
-              <SheetTrigger asChild>
-                <Button size="icon" variant="outline" className="sm:hidden">
-                  <PanelLeft className="h-5 w-5" />
-                  <span className="sr-only">Toggle Menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="sm:max-w-xs">
-                <nav className="grid gap-6 text-lg font-medium">
-                  <Link
-                    href="#"
-                    className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-                  >
-                    <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                    <span className="sr-only">Acme Inc</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  >
-                    <HomeIcon className="h-5 w-5" />
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 px-2.5 text-foreground"
-                  >
-                    <ShoppingCart className="h-5 w-5" />
-                    Orders
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  >
-                    <Package className="h-5 w-5" />
-                    Products
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  >
-                    <Users2 className="h-5 w-5" />
-                    Customers
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  >
-                    <LineChart className="h-5 w-5" />
-                    Settings
-                  </Link>
-                </nav>
-              </SheetContent>
-            </Sheet> */}
             <Breadcrumb className="flex">
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -382,12 +328,6 @@ export default function Home() {
               </BreadcrumbList>
             </Breadcrumb>
             <div className="relative ml-auto flex-1 md:grow-0">
-              {/* <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="another website"
-                className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-              /> */}
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -405,14 +345,6 @@ export default function Home() {
                   ></div>
                 </Button>
               </DropdownMenuTrigger>
-              {/* <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent> */}
             </DropdownMenu>
           </header>
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -490,7 +422,6 @@ export default function Home() {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    {/* <Progress value={12} aria-label="12% increase" /> */}
                   </CardFooter>
                 </Card>
               </div>
@@ -498,33 +429,7 @@ export default function Home() {
                 {" "}
                 {/* tabs that contain the lists */}
                 <div className="flex items-center">
-                  {/* <TabsList className="shadow-sm">
-                    <TabsTrigger value="week">1</TabsTrigger>
-                    <TabsTrigger value="month">2</TabsTrigger>
-                    <TabsTrigger value="year">3</TabsTrigger>
-                  </TabsList> */}
                   <div className="ml-auto flex items-center gap-2">
-                    {/* <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-7 gap-1 text-sm shadow-sm"
-                        >
-                          <ListFilter className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only">filter</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>filter by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked>
-                          fullfilled
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>dec</DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>ref</DropdownMenuCheckboxItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu> */}
                     <Link  href="/">
                     <Button size="sm" variant="outline" className="h-8 gap-1">
                       <SquarePen className="h-3.5 w-3.5" />
@@ -551,9 +456,6 @@ export default function Home() {
                             <TableHead className="hidden sm:table-cell">
                               ping
                             </TableHead>
-                            {/* <TableHead className="hidden sm:table-cell">
-                              incre / decre
-                            </TableHead> */}
                             <TableHead className="hidden md:table-cell">
                               time
                             </TableHead>
@@ -577,7 +479,6 @@ export default function Home() {
                               <TableCell className="hidden sm:table-cell">
                                 {entry.ping}ms
                               </TableCell>
-                              {/* <TableCell className="hidden sm:table-cell"></TableCell> */}
                               <TableCell className="hidden md:table-cell">
                                 {entry.date}
                               </TableCell>
@@ -625,33 +526,6 @@ export default function Home() {
                     <CardDescription>{websitetogetstatus}</CardDescription>
                   </div>
                   <div className="ml-auto flex items-center gap-1">
-                    {/* <Button size="sm" variant="outline" className="h-8 gap-1">
-                      <Truck className="h-3.5 w-3.5" />
-                      <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                        Track Order
-                      </span>
-                    </Button> */}
-
-                    {/* <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button size="icon" variant="outline" className="h-8 w-8">
-                          <Gauge className="h-3.5 w-3.5" />
-                          <span className="sr-only">More</span>
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>debug panel</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            debug content
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>close</AlertDialogCancel>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog> */}
-
                     <ModeToggle />
                   </div>
                 </CardHeader>
@@ -659,12 +533,6 @@ export default function Home() {
                   <div className="grid gap-3">
                     <div className="font-semibold">website details</div>
                     <ul className="grid gap-3">
-                      {/*<li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          Glimmer Lamps x <span>2</span>
-                        </span>}
-                        <span>$250.00</span>
-                      </li>*/}
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">status</span>
                         <span
@@ -688,25 +556,6 @@ export default function Home() {
                         <span>{webtype}</span>
                       </li>
                     </ul>
-                    {/* <Separator className="my-2" />
-                    <ul className="grid gap-3">
-                      <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Subtotal</span>
-                        <span>$299.00</span>
-                      </li>
-                      <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Shipping</span>
-                        <span>$5.00</span>
-                      </li>
-                      <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Tax</span>
-                        <span>$25.00</span>
-                      </li>
-                      <li className="flex items-center justify-between font-semibold">
-                        <span className="text-muted-foreground">Total</span>
-                        <span>$329.00</span>
-                      </li>
-                    </ul> */}
                   </div>
                   <Separator className="my-4" />
                   <div className="grid grid-cols-2 gap-4">
