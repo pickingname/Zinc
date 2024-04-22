@@ -165,7 +165,7 @@ export default function Home() {
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
-  let pinglimit: string | null;
+  let pinglimit: string | null = null;
   if (typeof window !== 'undefined') {
     pinglimit = window.localStorage.getItem("pinglimit");
   }
