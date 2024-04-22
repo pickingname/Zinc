@@ -165,7 +165,10 @@ export default function Home() {
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
-  var pinglimit = localStorage.getItem("pinglimit");
+  let pinglimit: string | null;
+  if (typeof window !== 'undefined') {
+    pinglimit = window.localStorage.getItem("pinglimit");
+  }
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
@@ -460,7 +463,7 @@ export default function Home() {
                       </CardHeader>
                       <CardContent>
                         <div className="text-xs text-muted-foreground">
-                          thats {pingPercentage}% of the limit ({pinglimit}ms)
+                          thats {pingPercentage}% of the limit ({pinglimit || 0}ms)
                         </div>
                       </CardContent>
                       <CardFooter>
