@@ -165,7 +165,7 @@ export default function Home() {
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
-  var pinglimit = localStorage.getItem("pinglimit");
+  var pinglimit = 5000
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
@@ -219,10 +219,9 @@ export default function Home() {
         }
 
         let currentPing = endTime - startTime;
-        setPing(currentPing);
-        let pingLimit = parseInt(localStorage.getItem("pinglimit") || "2500"); // Provide a default value of 0 if the retrieved value is null
+        setPing(currentPing); // Provide a default value of 0 if the retrieved value is null
         let percentage = Math.min(
-          (currentPing / pingLimit) * 100,
+          (currentPing / pinglimit) * 100,
           100
         );
         setPingPercentage(Number(percentage.toFixed(to_round)));
@@ -522,12 +521,14 @@ export default function Home() {
                         <DropdownMenuCheckboxItem>ref</DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
                     </DropdownMenu> */}
+                    <Link  href="/">
                     <Button size="sm" variant="outline" className="h-8 gap-1">
                       <SquarePen className="h-3.5 w-3.5" />
                       <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
                         <Link href="/">edit website</Link>
                       </span>
                     </Button>
+                    </Link>
                   </div>
                 </div>
                 <TabsContent value="week">

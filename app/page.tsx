@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -112,7 +113,7 @@ const Home: React.FC = () => {
                 required
               />
             </div>
-            <div className="grid gap-2">
+            {/* <div className="grid gap-2">
               <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 pb-2">
                 ping limit
               </p>
@@ -122,7 +123,7 @@ const Home: React.FC = () => {
                 step={100}
                 onChange={(value: React.SetStateAction<number>[]) => setPingLimit(value[0])}
               />
-            </div>
+            </div> */}
           </CardContent>
           <CardFooter>
             <Button className="w-full" onClick={handleSave}>

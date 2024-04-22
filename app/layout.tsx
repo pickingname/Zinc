@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Home from './page'; // Adjust the path according to your file structure
-
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +28,7 @@ export default function RootLayout({
           >
         {children}
         </ThemeProvider>
+        <Analytics />
         </body>
     </html>
   );
