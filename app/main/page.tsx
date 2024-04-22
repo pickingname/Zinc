@@ -165,7 +165,7 @@ export default function Home() {
   const thumblink =
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
-  var pinglimit = 5000
+  var pinglimit = localStorage.getItem("pinglimit");
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
 
@@ -220,8 +220,9 @@ export default function Home() {
 
         let currentPing = endTime - startTime;
         setPing(currentPing); // Provide a default value of 0 if the retrieved value is null
+        let pingLimitNumber = Number(pinglimit); // Convert pinglimit to a number
         let percentage = Math.min(
-          (currentPing / pinglimit) * 100,
+          (currentPing / pingLimitNumber) * 100, // Perform arithmetic operation with pingLimitNumber
           100
         );
         setPingPercentage(Number(percentage.toFixed(to_round)));

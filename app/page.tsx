@@ -61,6 +61,11 @@ const Home: React.FC = () => {
     localStorage.setItem("pinglimit", pingLimit.toString());
   }, [pingLimit]);
 
+  const handlePingLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, ""); // Remove any non-digit characters
+    setPingLimit(Number(value));
+  };
+
   return (
     <main className="font-outfit">
       <ToastContainer
@@ -95,7 +100,7 @@ const Home: React.FC = () => {
                 id="serverName"
                 type="text"
                 placeholder="my server"
-                value={serverName}
+                value={serverName ? serverName.toString() : ""}
                 onChange={(e) => setServerName(e.target.value)}
                 required
               />
@@ -107,22 +112,23 @@ const Home: React.FC = () => {
                 id="serverAddress"
                 type="text"
                 placeholder="https://example.com"
-                value={serverAddress}
+                value={serverAddress ? serverAddress.toString() : ""}
                 onChange={(e) => setServerAddress(e.target.value)}
                 required
               />
             </div>
-            {/* <div className="grid gap-2">
-              <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 pb-2">
-                ping limit
-              </p>
-              <Slider
-                defaultValue={[pingLimit]}
-                max={5000}
-                step={100}
-                onChange={(value: React.SetStateAction<number>[]) => setPingLimit(value[0])}
+            <div className="grid gap-2">
+              <Label htmlFor="pinglimit">ping limit (in milliseconds)</Label>
+              <Input
+                autoComplete="off"
+                id="pinglimit"
+                type="text"
+                placeholder="2500"
+                value={pingLimit ? pingLimit.toString() : ""}
+                onChange={handlePingLimitChange}
+                required
               />
-            </div> */}
+            </div>
           </CardContent>
           <CardFooter>
             <Button className="w-full" onClick={handleSave}>
