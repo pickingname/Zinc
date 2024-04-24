@@ -436,7 +436,7 @@ export default function Home() {
                 {/* tabs that contain the lists */}
                 <div className="flex items-center">
                   <div className="ml-auto flex items-center gap-2">
-                    <Link href="/">
+                    <Link href="/entry_th">
                       <Button size="sm" variant="outline" className="h-8 gap-1">
                         <SquarePen className="h-3.5 w-3.5" />
                         <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
