@@ -397,7 +397,7 @@ export default function Home() {
                         <CardTitle className="text-4xl">{ping}ms </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-muted-foreground text-nowrap">
                           that is {pingPercentage}% of the limit ({pinglimit || 0}
                           ms)
                         </div>
