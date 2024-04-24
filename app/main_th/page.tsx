@@ -644,17 +644,6 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="mt-10 overflow-hidden shadow-lg rounded-lg border bg-card text-card-foreground">
-                <CardHeader>
-                  <CardTitle className="text-2xl">หมายเหตุ</CardTitle>
-                  <CardDescription>วิธีการใช้งาน / อ่านหน้าจอ</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-                    <li>ms เป็นตัวย่อของมิลลิวินาที (1 วินาทีมี 1,000 มิลลิวินาที)</li>
-                  </ul>
-                </CardContent>
-              </Card>
             </div>
           </main>
         </div>
