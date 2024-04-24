@@ -224,6 +224,49 @@ export default function Home() {
 
         let currentPing = endTime - startTime;
         setPing(currentPing); // Provide a default value of 0 if the retrieved value is null
+
+        if (currentPing > 600) {
+          new Audio(
+            "https://pickingname.github.io/datastores/eew_beta_shortened.mp3"
+          ).play();
+          toast.warn("slow response (>300ms)");
+        }
+
+        if (currentPing > 1000) {
+          new Audio(
+            "https://pickingname.github.io/datastores/get/sounds/x.mp3"
+          ).play();
+          toast.warn("website starting to slow (>1000ms)");
+        }
+
+        if (currentPing > 1300) {
+          new Audio(
+            "https://pickingname.github.io/datastores/get/sounds/update.mp3"
+          ).play();
+          toast.warn("website is slow (>1300ms)");
+        }
+
+        if (currentPing > 1500) {
+          new Audio(
+            "https://pickingname.github.io/datastores/get/sounds/ipdate_sig.mp3"
+          ).play();
+          toast.warn("website is slow (>1500ms)");
+        }
+
+        if (currentPing > 1500) {
+          new Audio(
+            "https://pickingname.github.io/datastores/get/sounds/level_13.mp3"
+          ).play();
+          toast.warn("website is very slow (>1800ms)");
+        }
+
+        if (currentPing > 2000) {
+          new Audio(
+            "https://pickingname.github.io/datastores/P2PQ_Sndt.mp3"
+          ).play();
+          toast.error("website is CRITICALLY slow");
+        }
+
         if (pinglimit) {
           let pingLimitNumber = parseFloat(pinglimit);
           let percentage = Math.min((currentPing / pingLimitNumber) * 100, 100);
@@ -254,11 +297,11 @@ export default function Home() {
         settotaloffline((prevTotal) => prevTotal + 1);
         setOnline(false);
         setstatuscode(408);
-        setstatustext("server cannot be reached");
+        setstatustext("WEBSITE IS DOWN");
         if (initialFirstOffline) {
           toast.error("website is offline");
           new Audio(
-            "https://pickingname.github.io/datastores/get/sounds/no.mp3"
+            "https://pickingname.github.io/datastores/P2PQ_Sndt.mp3"
           ).play();
           initialFirstOffline = false;
           initialFirstOnline = true;
@@ -394,8 +437,7 @@ export default function Home() {
                       </CardHeader>
                       <CardContent>
                         <div className="text-xs text-muted-foreground">
-                          that is {pingPercentage}% of the limit ({pinglimit || 0}
-                          ms)
+                          ping limit is set to 1000ms with a hard limit of 2000ms and {pingPercentage}% to there
                         </div>
                       </CardContent>
                       <CardFooter>
