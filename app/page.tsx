@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -81,6 +83,18 @@ const Home: React.FC = () => {
         theme="dark"
         transition={Bounce}
       />
+
+      <Link href="/entry_th">
+      <div className="absolute top-0 right-0 m-2 ">
+        <Button size="sm" variant="outline" className="h-8 gap-1">
+          <Globe className="h-3.5 w-3.5" />
+          <span className="">
+            Change language
+          </span>
+        </Button>
+      </div>
+      </Link>
+
       <div className="flex justify-center items-center h-screen">
         <Card className="w-full max-w-sm">
           <CardHeader>
