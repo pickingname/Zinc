@@ -184,7 +184,7 @@ export default function Home() {
     websitetogetstatus = wasdurl;
     getData();
     overrideGlobalXHR(); /* override the xhr to disable cors */
-    let webtype = "not yet acquired";
+    let webtype = "Not yet acquired";
 
     if (
       localStorage.getItem("url") &&
@@ -218,7 +218,7 @@ export default function Home() {
         settotalonline((prevTotal) => prevTotal + 1);
 
         if (initialFirstOnline) {
-          toast.success("website is online");
+          toast.success("Website is online!");
           new Audio(
             "https://pickingname.github.io/datastores/get/sounds/yes.mp3"
           ).play();
@@ -243,7 +243,7 @@ export default function Home() {
         setPingHistory((prevHistory) => [
           {
             ping: currentPing,
-            status: "online",
+            status: "Online",
             date: new Date().toLocaleString(),
           },
           ...prevHistory.slice(0, 4),
@@ -364,9 +364,9 @@ export default function Home() {
                   x-chunk="dashboard-05-chunk-0"
                 >
                   <CardHeader className="pb-3">
-                    <CardTitle>fetcher</CardTitle>
+                    <CardTitle>Fetcher</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
-                      currently getting data from {websitetogetstatus}
+                      Currently getting data from {websitetogetstatus}
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
@@ -374,14 +374,14 @@ export default function Home() {
                     {fetching ? (
                       <Button disabled className="shadow-lg">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        please wait while we make the first request
+                        Please wait while we make the first request
                       </Button>
                     ) : (
                       <Button
                         variant={online ? "default" : "destructive"}
                         className="shadow-lg"
                       >
-                        website is {online ? "online" : "offline"}
+                        Website is {online ? "Online" : "Offline"}
                       </Button>
                     )}
                   </CardFooter>
@@ -392,14 +392,14 @@ export default function Home() {
                       <CardHeader className="pb-2">
                         <CardDescription>
                           {" "}
-                          {online ? "online" : "offline"}
+                          {online ? "Online" : "Offline"}
                         </CardDescription>
                         <CardTitle className="text-4xl">{ping}ms </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="text-xs text-muted-foreground text-nowrap">
-                          that is {pingPercentage}% of the limit ({pinglimit || 0}
-                          ms)
+                          That's {pingPercentage}% of the limit ({pinglimit || 0}
+                          ms).
                         </div>
                       </CardContent>
                       <CardFooter>
@@ -413,7 +413,7 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2" className="shadow-lg">
                   <CardHeader className="pb-2">
-                    <CardDescription>average ping</CardDescription>{" "}
+                    <CardDescription>Average ping</CardDescription>{" "}
                     {/* uses the raw value */}
                     <CardTitle className="text-4xl">
                       {isNaN(averagePing) ? "0" : averagePing.toFixed(0)}ms
@@ -422,7 +422,7 @@ export default function Home() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      in the last {averagepingvaluetogetRAW} requests
+                      In the last {averagepingvaluetogetRAW} requests
                     </div>
                   </CardContent>
                   <CardFooter></CardFooter>
@@ -437,7 +437,7 @@ export default function Home() {
                       <Button size="sm" variant="outline" className="h-8 gap-1">
                         <SquarePen className="h-3.5 w-3.5" />
                         <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                          <Link href="/">edit website</Link>
+                          <Link href="/">Edit website</Link>
                         </span>
                       </Button>
                     </Link>
@@ -446,23 +446,23 @@ export default function Home() {
                 <TabsContent value="week">
                   <Card x-chunk="dashboard-05-chunk-3" className="shadow-lg">
                     <CardHeader className="px-7">
-                      <CardTitle>ping history</CardTitle>
+                      <CardTitle>Ping history</CardTitle>
                       <CardDescription>
-                        recent pings from this app
+                        Recent pings from this app
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>request</TableHead>
+                            <TableHead>Request</TableHead>
                             <TableHead className="hidden sm:table-cell">
-                              ping
+                              Ping
                             </TableHead>
                             <TableHead className="hidden md:table-cell">
-                              time
+                              Time
                             </TableHead>
-                            <TableHead className="text-right">status</TableHead>
+                            <TableHead className="text-right">Status</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -523,7 +523,7 @@ export default function Home() {
                         className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
                       >
                         <Copy className="h-3 w-3" />
-                        <span className="sr-only">list</span>
+                        <span className="sr-only">List</span>
                       </Button>
                     </CardTitle>
                     <CardDescription>{websitetogetstatus}</CardDescription>
@@ -534,28 +534,28 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
-                    <div className="font-semibold">website details</div>
+                    <div className="font-semibold">Website details</div>
                     <ul className="grid gap-3">
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">status</span>
+                        <span className="text-muted-foreground">Status</span>
                         <span
                           className={online ? "text-green-600" : "text-red-00"}
                         >
-                          {online ? "online" : "offline"}
+                          {online ? "Online" : "Offline"}
                         </span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
-                          status code
+                          Status code
                         </span>
                         <span>{statuscode}</span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">ping</span>
+                        <span className="text-muted-foreground">Ping</span>
                         <span>{ping}ms</span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">protocol</span>
+                        <span className="text-muted-foreground">Protocol</span>
                         <span>{webtype}</span>
                       </li>
                     </ul>
@@ -563,13 +563,13 @@ export default function Home() {
                   <Separator className="my-4" />
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
-                      <div className="font-semibold">uptime</div>
+                      <div className="font-semibold">Uptime</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
                         {totalonline ? secstotime(totalonline) : "0 seconds"}
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
-                      <div className="font-semibold">downtime</div>
+                      <div className="font-semibold">Downtime</div>
                       <div className="text-muted-foreground">
                         {totaloffline ? secstotime(totaloffline) : "0 seconds"}
                       </div>
@@ -577,34 +577,34 @@ export default function Home() {
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">application information</div>
+                    <div className="font-semibold">Application information</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">start date</dt>
+                        <dt className="text-muted-foreground">Start date</dt>
                         <dd suppressHydrationWarning>{appstarttime}</dd>
                       </div>
                       <div className="flex items-center justify-between">
                         <dt className="text-muted-foreground">
-                          total requests
+                          Total requests
                         </dt>
                         <dd>
                           <a>{totalRequests}</a>
                         </dd>
                       </div>
                       <div className="flex items-center justify-between font-outfit">
-                        <dt className="text-muted-foreground">device ip</dt>
+                        <dt className="text-muted-foreground">Device IP</dt>
                         <dd>
                           <AlertDialog>
                             <AlertDialogTrigger>
                               <span className="underline underline-offset-2">
-                                click to view
+                                Click to view
                               </span>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>
                                   <span className="font-outfit">
-                                    current device ip
+                                    Current device ip
                                   </span>
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
@@ -614,7 +614,7 @@ export default function Home() {
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>close</AlertDialogCancel>
+                                <AlertDialogCancel>Close</AlertDialogCancel>
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
@@ -624,7 +624,7 @@ export default function Home() {
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">about</div>
+                    <div className="font-semibold">About</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="flex items-center gap-1 text-muted-foreground">
@@ -635,34 +635,13 @@ export default function Home() {
                             >
                               get.app
                             </a>{" "}
-                            v1.0.0 revision n°6
+                            v1.0.2 Revision n°6
                           </p>
                         </dt>
                       </div>
                     </dl>
                   </div>
                 </CardContent>
-                {/*<CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-                  <div className="text-xs text-muted-foreground">
-                    Updated <time dateTime="2023-11-23">November 23, 2023</time>
-                  </div>
-                  <Pagination className="ml-auto mr-0 w-auto">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <Button size="icon" variant="outline" className="h-6 w-6">
-                          <ChevronLeft className="h-3.5 w-3.5" />
-                          <span className="sr-only">Previous Order</span>
-                        </Button>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <Button size="icon" variant="outline" className="h-6 w-6">
-                          <ChevronRight className="h-3.5 w-3.5" />
-                          <span className="sr-only">Next Order</span>
-                        </Button>
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                    </CardFooter>*/}
               </Card>
             </div>
           </main>
