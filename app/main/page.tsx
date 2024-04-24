@@ -170,11 +170,9 @@ export default function Home() {
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   let pinglimit: string | null = null;
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      pinglimit = window.localStorage.getItem("pinglimit");
-    }
-  }, []);
+  if (typeof window !== "undefined") {
+    pinglimit = window.localStorage.getItem("pinglimit");
+  }
 
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;

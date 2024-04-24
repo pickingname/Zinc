@@ -170,11 +170,10 @@ export default function Home() {
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   let pinglimit: string | null = null;
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      pinglimit = window.localStorage.getItem("pinglimit");
-    }
-  }, []);
+  if (typeof window !== "undefined") {
+    pinglimit = window.localStorage.getItem("pinglimit");
+  }
+
 
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
@@ -425,7 +424,7 @@ export default function Home() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      in the last {averagepingvaluetogetRAW} requests
+                      ภายใน {averagepingvaluetogetRAW} คำขอ
                     </div>
                   </CardContent>
                   <CardFooter></CardFooter>
@@ -583,12 +582,12 @@ export default function Home() {
                     <div className="font-semibold">ข้อมูลแอปพลิเคชัน</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">start date</dt>
+                        <dt className="text-muted-foreground">วันที่เริ่มต้น</dt>
                         <dd suppressHydrationWarning>{appstarttime}</dd>
                       </div>
                       <div className="flex items-center justify-between">
                         <dt className="text-muted-foreground">
-                          total requests
+                          คำขอทั้งหมด
                         </dt>
                         <dd>
                           <a>{totalRequests}</a>
