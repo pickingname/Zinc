@@ -154,9 +154,13 @@ export default function Home() {
   }
 
   const getData = async () => {
-    const res = await axios.get("https://api.ipify.org/?format=json");
-    console.log(res.data);
-    setIP(res.data.ip);
+    try {
+      const res = await axios.get("https://api.ipify.org/?format=json");
+      console.log(res.data);
+      setIP(res.data.ip);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   let websitename = wasdname;
@@ -166,9 +170,11 @@ export default function Home() {
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   let pinglimit: string | null = null;
-  if (typeof window !== "undefined") {
-    pinglimit = window.localStorage.getItem("pinglimit");
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      pinglimit = window.localStorage.getItem("pinglimit");
+    }
+  }, []);
 
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;

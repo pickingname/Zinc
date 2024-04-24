@@ -146,17 +146,21 @@ export default function Home() {
     var m = Math.floor((seconds % 3600) / 60);
     var s = Math.floor(seconds % 60);
 
-    var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    var dDisplay = d > 0 ? d + (d == 1 ? " วัน, " : " วัน, ") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " ชั่วโมง, " : " ชั่วโมง, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " นาที, " : " นาที, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " วินาที" : " วินาที") : "";
     return dDisplay + hDisplay + mDisplay + sDisplay;
   }
 
   const getData = async () => {
-    const res = await axios.get("https://api.ipify.org/?format=json");
-    console.log(res.data);
-    setIP(res.data.ip);
+    try {
+      const res = await axios.get("https://api.ipify.org/?format=json");
+      console.log(res.data);
+      setIP(res.data.ip);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   let websitename = wasdname;
@@ -166,9 +170,11 @@ export default function Home() {
     "https://www.google.com/s2/favicons?domain=" + websitetogetstatus;
 
   let pinglimit: string | null = null;
-  if (typeof window !== "undefined") {
-    pinglimit = window.localStorage.getItem("pinglimit");
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      pinglimit = window.localStorage.getItem("pinglimit");
+    }
+  }, []);
 
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
@@ -214,7 +220,7 @@ export default function Home() {
         settotalonline((prevTotal) => prevTotal + 1);
 
         if (initialFirstOnline) {
-          toast.success("website is online");
+          toast.success("เว็บไซต์ออนไลน์");
           new Audio(
             "https://pickingname.github.io/datastores/get/sounds/yes.mp3"
           ).play();
@@ -239,7 +245,7 @@ export default function Home() {
         setPingHistory((prevHistory) => [
           {
             ping: currentPing,
-            status: "online",
+            status: "ออนไลน์",
             date: new Date().toLocaleString(),
           },
           ...prevHistory.slice(0, 4),
@@ -256,7 +262,7 @@ export default function Home() {
         setstatuscode(408);
         setstatustext("server cannot be reached");
         if (initialFirstOffline) {
-          toast.error("website is offline");
+          toast.error("ไม่สามารถเข้าถึงเว็บไซต์ได้");
           new Audio(
             "https://pickingname.github.io/datastores/get/sounds/no.mp3"
           ).play();
@@ -269,7 +275,7 @@ export default function Home() {
         setFetching(false);
 
         setPingHistory((prevHistory) => [
-          { ping: 0, status: "offline", date: new Date().toLocaleString() },
+          { ping: 0, status: "ออฟไลน์", date: new Date().toLocaleString() },
           ...prevHistory.slice(0, 4),
         ]);
       }
@@ -285,7 +291,7 @@ export default function Home() {
     lastTenPingValues.length;
 
   return (
-    <main className="font-outfit">
+    <main className="thai">
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
@@ -362,7 +368,7 @@ export default function Home() {
                   <CardHeader className="pb-3">
                     <CardTitle>fetcher</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
-                      currently getting data from {websitetogetstatus}
+                      กำลังรับข้อมูลจาก {websitetogetstatus}
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
@@ -370,14 +376,14 @@ export default function Home() {
                     {fetching ? (
                       <Button disabled className="shadow-lg">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        please wait while we make the first request
+                        โปรดรอสักครู่
                       </Button>
                     ) : (
                       <Button
                         variant={online ? "default" : "destructive"}
                         className="shadow-lg"
                       >
-                        website is {online ? "online" : "offline"}
+                        เว็บไซต์ {online ? "ออนไลน์" : "ออฟไลน์"}
                       </Button>
                     )}
                   </CardFooter>
@@ -388,14 +394,15 @@ export default function Home() {
                       <CardHeader className="pb-2">
                         <CardDescription>
                           {" "}
-                          {online ? "online" : "offline"}
+                          {online ? "ออนไลน์" : "ออฟไลน์"}
                         </CardDescription>
-                        <CardTitle className="text-4xl">{ping}ms </CardTitle>
+                        <CardTitle className="text-4xl">{ping}มิลลิวินาที </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="text-xs text-muted-foreground">
-                          that is {pingPercentage}% of the limit ({pinglimit || 0}
-                          ms)
+                          that{pingPercentage}% of the limit (
+                          {pinglimit || 0}
+                          มิลลิวินาที)
                         </div>
                       </CardContent>
                       <CardFooter>
@@ -409,7 +416,7 @@ export default function Home() {
                 </Card>
                 <Card x-chunk="dashboard-05-chunk-2" className="shadow-lg">
                   <CardHeader className="pb-2">
-                    <CardDescription>average ping</CardDescription>{" "}
+                    <CardDescription>ping เฉลี่ย</CardDescription>{" "}
                     {/* uses the raw value */}
                     <CardTitle className="text-4xl">
                       {isNaN(averagePing) ? "0" : averagePing.toFixed(0)}ms
@@ -433,7 +440,7 @@ export default function Home() {
                       <Button size="sm" variant="outline" className="h-8 gap-1">
                         <SquarePen className="h-3.5 w-3.5" />
                         <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                          <Link href="/">edit website</Link>
+                          <Link href="/entry_th">เปลี่ยนเว็บไซต์</Link>
                         </span>
                       </Button>
                     </Link>
@@ -442,23 +449,25 @@ export default function Home() {
                 <TabsContent value="week">
                   <Card x-chunk="dashboard-05-chunk-3" className="shadow-lg">
                     <CardHeader className="px-7">
-                      <CardTitle>ping history</CardTitle>
+                      <CardTitle>ประวัติการ ping</CardTitle>
                       <CardDescription>
-                        recent pings from this app
+                      Ping ล่าสุดจากแอปนี้
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>request</TableHead>
+                            <TableHead>เว็บไซต์</TableHead>
                             <TableHead className="hidden sm:table-cell">
                               ping
                             </TableHead>
                             <TableHead className="hidden md:table-cell">
-                              time
+                              เวลา
                             </TableHead>
-                            <TableHead className="text-right">status</TableHead>
+                            <TableHead className="text-right">
+                              สถานะเว็บไซต์
+                            </TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -466,7 +475,7 @@ export default function Home() {
                             <TableRow
                               key={index}
                               className={
-                                entry.status === "offline" ? "bg-accent" : ""
+                                entry.status === "ออฟไลน์" ? "bg-accent" : ""
                               }
                             >
                               <TableCell>
@@ -476,7 +485,7 @@ export default function Home() {
                                 </div>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">
-                                {entry.ping}ms
+                                {entry.ping}มิลลิวินาที
                               </TableCell>
                               <TableCell className="hidden md:table-cell">
                                 {entry.date}
@@ -485,7 +494,7 @@ export default function Home() {
                                 <Badge
                                   className="text-xs"
                                   variant={
-                                    entry.status === "offline"
+                                    entry.status === "ออฟไลน์"
                                       ? "destructive"
                                       : "outline"
                                   }
@@ -530,27 +539,25 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
-                    <div className="font-semibold">website details</div>
+                    <div className="font-semibold">รายละเอียดเว็บไซต์</div>
                     <ul className="grid gap-3">
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">status</span>
+                        <span className="text-muted-foreground">สถานะ</span>
                         <span
                           className={online ? "text-green-600" : "text-red-00"}
                         >
-                          {online ? "online" : "offline"}
+                          {online ? "ออนไลน์" : "ออฟไลน์"}
                         </span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          status code
-                        </span>
+                        <span className="text-muted-foreground">รหัส HTTP</span>
                         <span>{statuscode}</span>
                       </li>
-                      <li className="flex items-center justify-between">
+                      <li className="flex items-center justify-between  font-outfit">
                         <span className="text-muted-foreground">ping</span>
-                        <span>{ping}ms</span>
+                        <span>{ping}มิลลิวินาที</span>
                       </li>
-                      <li className="flex items-center justify-between">
+                      <li className="flex items-center justify-between font-outfit">
                         <span className="text-muted-foreground">protocol</span>
                         <span>{webtype}</span>
                       </li>
@@ -559,21 +566,21 @@ export default function Home() {
                   <Separator className="my-4" />
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
-                      <div className="font-semibold">uptime</div>
+                      <div className="font-semibold">รวมเวลาออนไลน์</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        {totalonline ? secstotime(totalonline) : "0 seconds"}
+                        {totalonline ? secstotime(totalonline) : "0 วินาที"}
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
-                      <div className="font-semibold">downtime</div>
+                      <div className="font-semibold">รวมเวลาออฟไลน์</div>
                       <div className="text-muted-foreground">
-                        {totaloffline ? secstotime(totaloffline) : "0 seconds"}
+                        {totaloffline ? secstotime(totaloffline) : "0 วินาที"}
                       </div>
                     </div>
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">application information</div>
+                    <div className="font-semibold">ข้อมูลแอปพลิเคชัน</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="text-muted-foreground">start date</dt>
@@ -588,19 +595,19 @@ export default function Home() {
                         </dd>
                       </div>
                       <div className="flex items-center justify-between font-outfit">
-                        <dt className="text-muted-foreground">device ip</dt>
+                        <dt className="text-muted-foreground">IP ของอุปกรณ์</dt>
                         <dd>
                           <AlertDialog>
                             <AlertDialogTrigger>
                               <span className="underline underline-offset-2">
-                                click to view
+                                คลิกเพื่อดู
                               </span>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>
                                   <span className="font-outfit">
-                                    current device ip
+                                    IP ของอุปกรณ์ปัจจุบัน
                                   </span>
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
@@ -610,7 +617,7 @@ export default function Home() {
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>close</AlertDialogCancel>
+                                <AlertDialogCancel>ปิด</AlertDialogCancel>
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
@@ -620,7 +627,7 @@ export default function Home() {
                   </div>
                   <Separator className="my-4" />
                   <div className="grid gap-3">
-                    <div className="font-semibold">about</div>
+                    <div className="font-semibold">รายละเอียดแอป</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
                         <dt className="flex items-center gap-1 text-muted-foreground">
