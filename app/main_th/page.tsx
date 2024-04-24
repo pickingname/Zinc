@@ -1,5 +1,7 @@
 "use client";
 
+import { Label } from "@/components/ui/label";
+
 {
   /* imports */
 }
@@ -90,6 +92,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
@@ -173,7 +176,6 @@ export default function Home() {
   if (typeof window !== "undefined") {
     pinglimit = window.localStorage.getItem("pinglimit");
   }
-
 
   let averagepingvaluetogetRAW = 10;
   let to_round = 1;
@@ -395,13 +397,12 @@ export default function Home() {
                           {" "}
                           {online ? "ออนไลน์" : "ออฟไลน์"}
                         </CardDescription>
-                        <CardTitle className="text-4xl">{ping}มิลลิวินาที </CardTitle>
+                        <CardTitle className="text-4xl">{ping}ms </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="text-xs text-muted-foreground">
-                          that{pingPercentage}% of the limit (
-                          {pinglimit || 0}
-                          มิลลิวินาที)
+                          เป็น {pingPercentage}% ของขีดจำกัด ({pinglimit || 0}
+                          ms)
                         </div>
                       </CardContent>
                       <CardFooter>
@@ -424,10 +425,10 @@ export default function Home() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      ภายใน {averagepingvaluetogetRAW} คำขอ
+                      ล่าสุดใน {averagepingvaluetogetRAW} ครั้ง
                     </div>
                   </CardContent>
-                  <CardFooter></CardFooter>
+                  <CardFooter className="text-xs text-muted-foreground">ms เป็นตัวย่อของมิลลิวินาที (1 วินาทีมี 1,000 มิลลิวินาที)</CardFooter>
                 </Card>
               </div>
               <Tabs defaultValue="week">
@@ -449,9 +450,7 @@ export default function Home() {
                   <Card x-chunk="dashboard-05-chunk-3" className="shadow-lg">
                     <CardHeader className="px-7">
                       <CardTitle>ประวัติการ ping</CardTitle>
-                      <CardDescription>
-                      Ping ล่าสุดจากแอปนี้
-                      </CardDescription>
+                      <CardDescription>Ping ล่าสุดจากแอปนี้</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <Table>
@@ -484,7 +483,7 @@ export default function Home() {
                                 </div>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">
-                                {entry.ping}มิลลิวินาที
+                                {entry.ping}ms
                               </TableCell>
                               <TableCell className="hidden md:table-cell">
                                 {entry.date}
@@ -554,7 +553,7 @@ export default function Home() {
                       </li>
                       <li className="flex items-center justify-between  font-outfit">
                         <span className="text-muted-foreground">ping</span>
-                        <span>{ping}มิลลิวินาที</span>
+                        <span>{ping}ms</span>
                       </li>
                       <li className="flex items-center justify-between font-outfit">
                         <span className="text-muted-foreground">protocol</span>
@@ -582,13 +581,13 @@ export default function Home() {
                     <div className="font-semibold">ข้อมูลแอปพลิเคชัน</div>
                     <dl className="grid gap-3">
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">วันที่เริ่มต้น</dt>
+                        <dt className="text-muted-foreground">
+                          วันที่เริ่มต้น
+                        </dt>
                         <dd suppressHydrationWarning>{appstarttime}</dd>
                       </div>
                       <div className="flex items-center justify-between">
-                        <dt className="text-muted-foreground">
-                          คำขอทั้งหมด
-                        </dt>
+                        <dt className="text-muted-foreground">คำขอทั้งหมด</dt>
                         <dd>
                           <a>{totalRequests}</a>
                         </dd>
@@ -644,27 +643,17 @@ export default function Home() {
                     </dl>
                   </div>
                 </CardContent>
-                {/*<CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-                  <div className="text-xs text-muted-foreground">
-                    Updated <time dateTime="2023-11-23">November 23, 2023</time>
-                  </div>
-                  <Pagination className="ml-auto mr-0 w-auto">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <Button size="icon" variant="outline" className="h-6 w-6">
-                          <ChevronLeft className="h-3.5 w-3.5" />
-                          <span className="sr-only">Previous Order</span>
-                        </Button>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <Button size="icon" variant="outline" className="h-6 w-6">
-                          <ChevronRight className="h-3.5 w-3.5" />
-                          <span className="sr-only">Next Order</span>
-                        </Button>
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                    </CardFooter>*/}
+              </Card>
+              <Card className="mt-10 overflow-hidden shadow-lg rounded-lg border bg-card text-card-foreground">
+                <CardHeader>
+                  <CardTitle className="text-2xl">หมายเหตุ</CardTitle>
+                  <CardDescription>วิธีการใช้งาน / อ่านหน้าจอ</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                    <li>ms เป็นตัวย่อของมิลลิวินาที (1 วินาทีมี 1,000 มิลลิวินาที)</li>
+                  </ul>
+                </CardContent>
               </Card>
             </div>
           </main>
