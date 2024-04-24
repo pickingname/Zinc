@@ -108,7 +108,7 @@ const Home: React.FC = () => {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="serverName">server name</Label>
+              <Label htmlFor="serverName">website name</Label>
               <Input
                 autoComplete="off"
                 id="serverName"

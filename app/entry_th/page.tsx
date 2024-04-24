@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -54,7 +56,7 @@ const Home: React.FC = () => {
     localStorage.setItem("name", serverName);
     localStorage.setItem("url", serverAddress);
     toast.success(`saved! redirecting to main page.`);
-    window.location.href = "/main";
+    window.location.href = "/main_th";
   };
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <main className="font-outfit">
+    <main className="thai">
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
@@ -81,32 +83,41 @@ const Home: React.FC = () => {
         theme="dark"
         transition={Bounce}
       />
+
+      <Link href="/">
+        <div className="absolute top-0 right-0 m-2 ">
+          <Button size="sm" variant="outline" className="h-8 gap-1">
+            <Globe className="h-3.5 w-3.5" />
+            <span className="">เปลี่ยนภาษา</span>
+          </Button>
+        </div>
+      </Link>
+
       <div className="flex justify-center items-center h-screen">
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="text-2xl">get started</CardTitle>
+            <CardTitle className="text-2xl">การตั้งค่า</CardTitle>
             <CardDescription>
               <span className="text-sm text-red-400 text-balance">
-                please include the protocol (http/https) and the port number if
-                needed.
+                โปรดระบุโปรโตคอล (http/https) และหมายเลขพอร์ต (ถ้าจำเป็น)
               </span>
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="serverName">server name</Label>
+              <Label htmlFor="serverName">ชื่อเว็บไซต์</Label>
               <Input
                 autoComplete="off"
                 id="serverName"
                 type="text"
-                placeholder="my server"
+                placeholder="เว็บไซต์ของฉัน"
                 value={serverName ? serverName.toString() : ""}
                 onChange={(e) => setServerName(e.target.value)}
                 required
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="serverAddress">server address</Label>
+              <Label htmlFor="serverAddress">ที่อยู่เว็บไซต์</Label>
               <Input
                 autoComplete="off"
                 id="serverAddress"
@@ -118,7 +129,7 @@ const Home: React.FC = () => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="pinglimit">ping limit (in milliseconds)</Label>
+              <Label htmlFor="pinglimit">ขีดจำกัดการ Ping (ในมิลลิวินาที)</Label>
               <Input
                 autoComplete="off"
                 id="pinglimit"
@@ -130,11 +141,11 @@ const Home: React.FC = () => {
               />
             </div>
           </CardContent>
-          <Button className="w-full" onClick={handleSave}>
           <CardFooter>
-              save
+            <Button className="w-full text-sm text-center" onClick={handleSave}>
+              บันทึก
+            </Button>
           </CardFooter>
-          </Button>
         </Card>
       </div>
     </main>
