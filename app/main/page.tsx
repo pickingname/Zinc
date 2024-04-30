@@ -630,7 +630,7 @@ export default function Home() {
                         <dt className="flex items-center gap-1 text-muted-foreground">
                           <p>
                             <a
-                              href="https://github.com/pickingname/get"
+                              
                               className="text-blue-400 underline underline-offset-2"
                             >
                               get.app
