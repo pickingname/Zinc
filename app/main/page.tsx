@@ -633,7 +633,7 @@ export default function Home() {
                               
                               className="text-blue-400 underline underline-offset-2"
                             >
-                              get.app
+                              Zinc
                             </a>{" "}
                             v1.0.2 Revision n°6
                           </p>

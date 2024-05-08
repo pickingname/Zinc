@@ -8,8 +8,8 @@ import Home from './page'; // Adjust the path according to your file structure
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "get",
-  description: "get", // this shouldnt be shown because this is an application, not browser site
+  title: "Zinc",
+  description: "website status viewer", // this shouldnt be shown because this is an application, not browser site
 };
 
 export default function RootLayout({

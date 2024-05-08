@@ -631,12 +631,11 @@ export default function Home() {
                         <dt className="flex items-center gap-1 text-muted-foreground">
                           <p>
                             <a
-                              href="https://github.com/pickingname/get"
                               className="text-blue-400 underline underline-offset-2"
                             >
-                              get.app
+                              Zinc
                             </a>{" "}
-                            v1.0.0 revision n°6
+                            v1.0.2 revision n°6
                           </p>
                         </dt>
                       </div>

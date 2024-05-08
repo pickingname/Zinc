@@ -15,7 +15,7 @@ this app fetches a website from your config, then it will just repeatly fetches
 
 ## running from source
 
-### `git clone https://github.com/pickingname/get`
+### `git clone https://github.com/pickingname/zinc`
 - this will clone the repo into your local matchine
 
 ### `npm install`

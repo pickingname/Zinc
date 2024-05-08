@@ -8,7 +8,7 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "get",
+    "productName": "Zinc",
     "version": "1.0.2"
   },
   "tauri": {
@@ -34,8 +34,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.pickingname.get",
-      "longDescription": "application that pings the server and see the status of the server",
+      "identifier": "dev.pickingname.zinc",
+      "longDescription": "application that pings the server and returns the status of the server",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -63,7 +63,7 @@
         "fullscreen": false,
         "height": 1100,
         "resizable": true,
-        "title": "get",
+        "title": "Zinc",
         "width": 1500,
         "minHeight": 260,
         "minWidth": 380
