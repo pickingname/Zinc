@@ -1,4 +1,4 @@
-# get
+# Zinc
 
 ## what does this app do??
 this app fetches a website from your config, then it will just repeatly fetches
