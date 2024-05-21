@@ -3,6 +3,8 @@
 ## what does this app do??
 this app fetches a website from your config, then it will just repeatly fetches
 
+![zinc_preview](https://github.com/pickingname/Zinc/assets/115550149/a47b4133-ea7a-4ae9-8dbb-f9732f6f5754)
+
 ## funcions
 - ping monitoring
 - offline / online notifcation
