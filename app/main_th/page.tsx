@@ -361,13 +361,13 @@ export default function Home() {
               {/* all of the blocks are contained here, except reciept card */}
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                 {" "}
-                {/* top row cards (fetcher, ping, avgms) */}
+                {/* top row cards (zinc, ping, avgms) */}
                 <Card
                   className="sm:col-span-2 shadow-lg"
                   x-chunk="dashboard-05-chunk-0"
                 >
                   <CardHeader className="pb-3">
-                    <CardTitle>fetcher</CardTitle>
+                    <CardTitle>Zinc</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
                       กำลังรับข้อมูลจาก {websitetogetstatus}
                     </CardDescription>

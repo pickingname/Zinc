@@ -1,12 +1,12 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "Zinc"
+version = "1.0.2"
+description = "A program to monitor a website's status"
+authors = ["pickingname", "wanmaixd"]
 license = ""
-repository = ""
+repository = "https://github.com/pickingname/Zinc"
 default-run = "app"
-edition = "2021"
+edition = "2024"
 rust-version = "1.60"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
