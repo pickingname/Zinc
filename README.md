@@ -1,4 +1,7 @@
-# Zinc
+# Zinc [ARCHIVED]
+
+# ARCHIVED
+we didnt got chosen by them, so theres no need for continuing this app.
 
 ## what does this app do??
 zinc is a program to fetch any website’s status and it will returns the response back. the app was built in tauri
