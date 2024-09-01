@@ -1,7 +1,7 @@
 # Zinc
 
 ## what does this app do??
-zinc is a program to fetch any website’s status and it will returns the response back. the app was built in tauri
+Zinc is a desktop application built with Tauri that monitors the status of any website. It fetches the website's status every second and provides real-time updates on its availability.
 
 ![zinc_preview](https://github.com/pickingname/Zinc/assets/115550149/a47b4133-ea7a-4ae9-8dbb-f9732f6f5754)
 
